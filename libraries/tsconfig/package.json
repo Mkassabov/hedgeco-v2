@@ -1,0 +1,7 @@
+{
+	"name": "@hedgeco/tsconfig",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"files": ["base.json"]
+}

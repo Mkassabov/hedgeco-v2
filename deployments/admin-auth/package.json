@@ -1,0 +1,15 @@
+{
+	"name": "@hedgeco/admin-auth",
+	"type": "module",
+	"version": "0.0.1",
+	"dependencies": {
+		"@aws-sdk/client-sesv2": "^3.758.0",
+		"@openauthjs/openauth": "^0.4.3",
+		"hono": "^4.7.4",
+		"sst": "^3.9.39",
+		"valibot": "^1.0.0"
+	},
+	"devDependencies": {
+		"@hedgeco/tsconfig": "workspace:*"
+	}
+}

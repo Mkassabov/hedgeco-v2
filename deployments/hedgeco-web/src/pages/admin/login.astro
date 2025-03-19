@@ -1,0 +1,14 @@
+---
+import { actions } from "astro:actions";
+
+const loginResult = Astro.getActionResult(actions.login);
+if (loginResult && !loginResult.error) {
+	return Astro.redirect(loginResult.data);
+}
+---
+<form method="POST" action={actions.login}>
+	<button>Login</button>
+</form>
+
+
+

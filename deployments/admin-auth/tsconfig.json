@@ -1,0 +1,5 @@
+{
+	"extends": "@hedgeco/tsconfig/base.json",
+	"include": ["src/**/*"],
+	"exclude": ["dist"]
+}
