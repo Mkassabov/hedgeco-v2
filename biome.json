@@ -30,7 +30,7 @@
 		{
 			"include": ["sst.config.ts"],
 			"javascript": {
-				"globals": ["$config", "sst"]
+				"globals": ["$config", "sst", "$app"]
 			}
 		},
 		{
