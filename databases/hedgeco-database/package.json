@@ -5,6 +5,9 @@
 	"scripts": {
 		"db": "sst shell drizzle-kit"
 	},
+	"exports": {
+		".": "./src/db/schema.ts"
+	},
 	"dependencies": {
 		"drizzle-kit": "^0.30.5",
 		"drizzle-orm": "^0.40.1",
@@ -12,6 +15,6 @@
 		"sst": "^3.9.44"
 	},
 	"devDependencies": {
-		"@hedgeco/tsconfig": "workspace:*"
+		"typescript": "latest"
 	}
 }

@@ -3,9 +3,12 @@
 	"type": "module",
 	"version": "0.0.1",
 	"dependencies": {
+		"@hedgeco/hedgeco-database": "workspace:*",
 		"@aws-sdk/client-sesv2": "^3.758.0",
 		"@openauthjs/openauth": "^0.4.3",
+		"drizzle-orm": "^0.40.1",
 		"hono": "^4.7.4",
+		"mysql2": "^3.14.0",
 		"sst": "^3.9.39",
 		"valibot": "^1.0.0"
 	},

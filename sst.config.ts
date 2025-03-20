@@ -16,7 +16,7 @@ export default $config({
 		});
 		const cluster = new sst.aws.Cluster("hedgeco-cluster", { vpc: hedgecoVpc });
 
-		const primaryDatabase = new sst.aws.Aurora("hedgeco-database", {
+		const hedgecoDatabase = new sst.aws.Aurora("hedgeco-database", {
 			engine: "mysql",
 			vpc: hedgecoVpc,
 		});
@@ -28,13 +28,13 @@ export default $config({
 		const adminAuth = new sst.aws.Auth("admin-auth", {
 			issuer: {
 				handler: "deployments/admin-auth/src/index.handler",
-				link: [noReplyEmail, primaryDatabase],
+				link: [noReplyEmail, hedgecoDatabase],
 			},
 		});
 
-		const hedgecoWeb = new sst.aws.Service("hedgeco-web", {
+		new sst.aws.Service("hedgeco-web", {
 			cluster,
-			link: [adminAuth, primaryDatabase],
+			link: [adminAuth, hedgecoDatabase],
 			environment: {
 				adminAuthUrl: adminAuth.url,
 			},
@@ -51,7 +51,7 @@ export default $config({
 		});
 
 		new sst.x.DevCommand("studio", {
-			link: [primaryDatabase],
+			link: [hedgecoDatabase],
 			dev: {
 				command: "bunx drizzle-kit studio",
 				directory: "databases/hedgeco-database",

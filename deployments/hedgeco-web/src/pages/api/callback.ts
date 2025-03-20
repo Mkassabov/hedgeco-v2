@@ -5,9 +5,15 @@ export const GET: APIRoute = async ({ request, cookies }) => {
 	const url = new URL(request.url);
 	const code = url.searchParams.get("code");
 
-	console.log(code);
+	if (!code) {
+		return new Response(
+			JSON.stringify({
+				message: "No code provided",
+			}),
+		);
+	}
 
-	const exchanged = await client.exchange(code!, `${url.origin}/api/callback`);
+	const exchanged = await client.exchange(code, `${url.origin}/api/callback`);
 
 	if (exchanged.err) {
 		return new Response(

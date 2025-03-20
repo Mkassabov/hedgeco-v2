@@ -1,4 +1,5 @@
 {
 	"git.ignoreLimitWarning": true,
-	"cSpell.words": ["hedgeco"]
+	"cSpell.words": ["hedgeco", "openauthjs"],
+	"typescript.tsdk": "node_modules/typescript/lib"
 }
