@@ -22,7 +22,7 @@ export default $config({
 		});
 
 		const noReplyEmail = new sst.aws.Email("no-reply-email-service", {
-			sender: "no-reply@hedgeco.com",
+			sender: "no-reply@hedgeco.net",
 		});
 
 		const adminAuth = new sst.aws.Auth("admin-auth", {
@@ -32,7 +32,7 @@ export default $config({
 			},
 		});
 
-		new sst.aws.Service("hedgeco-web", {
+		const hedgecoWeb = new sst.aws.Service("hedgeco-web", {
 			cluster,
 			link: [adminAuth, primaryDatabase],
 			environment: {
@@ -50,12 +50,12 @@ export default $config({
 			},
 		});
 
-		return {
-			host: primaryDatabase.host,
-			port: primaryDatabase.port,
-			username: primaryDatabase.username,
-			password: primaryDatabase.password,
-			database: primaryDatabase.database,
-		};
+		new sst.x.DevCommand("studio", {
+			link: [primaryDatabase],
+			dev: {
+				command: "bunx drizzle-kit studio",
+				directory: "databases/hedgeco-database",
+			},
+		});
 	},
 });

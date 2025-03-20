@@ -1,17 +1,9 @@
+import { subjects } from "@hedgeco/admin-auth";
 import { createClient } from "@openauthjs/openauth/client";
-import { createSubjects } from "@openauthjs/openauth/subject";
 import type { AstroCookies } from "astro";
 import { Resource } from "sst";
-import { object, string } from "valibot";
 
 const adminAuthUrl = Resource["admin-auth"].url;
-
-//todo dedupe this
-export const subjects = createSubjects({
-	user: object({
-		id: string(),
-	}),
-});
 
 export const client = createClient({
 	// biome-ignore lint/style/useNamingConvention: defined by external package
@@ -38,17 +30,20 @@ export function setTokens(
 	});
 }
 
-export async function auth(cookies: AstroCookies) {
+export async function adminAuth(cookies: AstroCookies) {
 	const accessToken = cookies.get("access_token");
 	const refreshToken = cookies.get("refresh_token");
 
 	if (!accessToken) {
 		return false;
 	}
+	console.log(accessToken, accessToken.value);
 
 	const verified = await client.verify(subjects, accessToken.value, {
 		refresh: refreshToken?.value,
 	});
+
+	console.log(verified);
 
 	if (verified.err) {
 		return false;

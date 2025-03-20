@@ -32,6 +32,16 @@
 			"javascript": {
 				"globals": ["$config", "sst"]
 			}
+		},
+		{
+			"include": ["**/sst-env.d.ts"],
+			"linter": {
+				"rules": {
+					"complexity": {
+						"noUselessEmptyExport": "off"
+					}
+				}
+			}
 		}
 	],
 	"linter": {

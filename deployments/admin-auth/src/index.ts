@@ -3,6 +3,7 @@ import { issuer } from "@openauthjs/openauth";
 import { CodeProvider } from "@openauthjs/openauth/provider/code";
 import { MemoryStorage } from "@openauthjs/openauth/storage/memory";
 import { CodeUI } from "@openauthjs/openauth/ui/code";
+import type { Theme } from "@openauthjs/openauth/ui/theme";
 import { handle } from "hono/aws-lambda";
 import { Resource } from "sst";
 import { subjects } from "./subjects";
@@ -14,11 +15,24 @@ async function getUser(email: string) {
 	return "123";
 }
 
+const theme: Theme = {
+	title: "HedgeCo Admin Auth",
+	primary: "#3280FF",
+	background: "#FFFFFF",
+	logo: "http://localhost:4321/public/hedgeco.svg",
+	css: `
+		img[data-component="logo"] {
+			height: 8rem;
+		}
+	`,
+};
+
 const app = issuer({
 	subjects,
 	storage: MemoryStorage(),
 	// Remove after setting custom domain
 	allow: async () => true,
+	theme: theme,
 	providers: {
 		code: CodeProvider(
 			CodeUI({
@@ -31,7 +45,7 @@ const app = issuer({
 							// biome-ignore lint/style/useNamingConvention: <explanation>
 							Destination: {
 								// biome-ignore lint/style/useNamingConvention: <explanation>
-								ToAddresses: [email],
+								ToAddresses: [email.email],
 							},
 							// biome-ignore lint/style/useNamingConvention: <explanation>
 							Content: {
@@ -54,7 +68,7 @@ const app = issuer({
 	},
 	success: async (ctx, value) => {
 		if (value.provider === "code") {
-			return ctx.subject("user", {
+			return ctx.subject("adminUser", {
 				id: await getUser(value.claims.email),
 			});
 		}

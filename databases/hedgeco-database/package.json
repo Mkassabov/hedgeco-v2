@@ -1,0 +1,17 @@
+{
+	"name": "@hedgeco/hedgeco-database",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"db": "sst shell drizzle-kit"
+	},
+	"dependencies": {
+		"drizzle-kit": "^0.30.5",
+		"drizzle-orm": "^0.40.1",
+		"mysql2": "^3.14.0",
+		"sst": "^3.9.44"
+	},
+	"devDependencies": {
+		"@hedgeco/tsconfig": "workspace:*"
+	}
+}

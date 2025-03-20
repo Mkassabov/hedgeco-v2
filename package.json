@@ -5,7 +5,10 @@
 		"@biomejs/biome": "1.9.4",
 		"typescript": "latest"
 	},
-	"workspaces": ["libraries/*", "deployments/*"],
+	"scripts": {
+		"dev": "sst dev"
+	},
+	"workspaces": ["libraries/*", "deployments/*", "databases/*"],
 	"dependencies": {
 		"sst": "^3.9.39"
 	}

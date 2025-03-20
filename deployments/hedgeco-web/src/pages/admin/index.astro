@@ -1,7 +1,7 @@
 ---
 import { actions } from "astro:actions";
-import { auth } from "../../auth";
-const subject = await auth(Astro.cookies);
+import { adminAuth } from "../../auth";
+const subject = await adminAuth(Astro.cookies);
 
 const logoutResult = Astro.getActionResult(actions.logout);
 if (logoutResult && !logoutResult.error) {

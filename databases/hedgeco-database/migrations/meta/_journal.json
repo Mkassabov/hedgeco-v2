@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1742435910146,
+      "tag": "0000_brown_storm",
+      "breakpoints": true
+    }
+  ]
+}

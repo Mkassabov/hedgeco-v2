@@ -5,6 +5,8 @@ export const GET: APIRoute = async ({ request, cookies }) => {
 	const url = new URL(request.url);
 	const code = url.searchParams.get("code");
 
+	console.log(code);
+
 	const exchanged = await client.exchange(code!, `${url.origin}/api/callback`);
 
 	if (exchanged.err) {
