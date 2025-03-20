@@ -15,9 +15,13 @@ export default $config({
 	},
 	// biome-ignore lint/suspicious/useAwait: <explanation>
 	async run() {
+		const isProduction = $app.stage === "production";
 		const hedgecoNetZoneId = "292a2aee7bf6ec6ff365214659c76efa";
-		const rootDomain =
-			$app.stage === "production" ? "hedgeco.net" : `${$app.stage}.hedgeco.net`;
+		const rootDomain = isProduction
+			? "hedgeco.net"
+			: `${$app.stage}.hedgeco.net`;
+		const webDomain = `v2.${rootDomain}`;
+
 		//* infra
 		const hedgecoVpc = new sst.aws.Vpc("hedgeco-vpc", {
 			bastion: true,
@@ -38,6 +42,13 @@ export default $config({
 			issuer: {
 				handler: "deployments/admin-auth/src/index.handler",
 				link: [noReplyEmail, hedgecoDatabase],
+				environment: {
+					validClients: JSON.stringify({
+						"hedgeco-web": isProduction
+							? [webDomain]
+							: [webDomain, "localhost"],
+					}),
+				},
 			},
 			domain: {
 				name: `admin-auth.${rootDomain}`,

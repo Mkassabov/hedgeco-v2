@@ -53,9 +53,27 @@ const theme: Theme = {
 
 const app = issuer({
 	subjects,
-	// storage: MemoryStorage(),
-	// Remove after setting custom domain
-	allow: async () => true,
+	// biome-ignore lint/suspicious/useAwait: <explanation>
+	allow: async (input, _req) => {
+		const validClients = JSON.parse(process.env.validClients);
+		const client = validClients[input.clientID];
+		if (client == null) {
+			return false;
+		}
+		const redirectUrl = new URL(input.redirectURI);
+		const redirectHost = redirectUrl.hostname;
+
+		if (client.includes(redirectHost)) {
+			if (
+				(redirectHost === "localhost" && redirectUrl.protocol !== "http:") ||
+				(redirectHost !== "localhost" && redirectUrl.protocol !== "https:")
+			) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	},
 	theme: theme,
 	providers: {
 		code: CodeProvider(
