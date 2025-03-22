@@ -9,12 +9,22 @@
 		"astro": "astro"
 	},
 	"dependencies": {
-		"@hedgeco/admin-auth": "workspace:*",
 		"@astrojs/node": "^9.1.3",
+		"@astrojs/react": "^4.2.1",
+		"@hedgeco/admin-auth": "workspace:*",
+		"@hedgeco/hedgeco-database": "workspace:*",
 		"@openauthjs/openauth": "^0.4.3",
+		"@tailwindcss/vite": "^4.0.15",
+		"@types/react": "^19.0.12",
+		"@types/react-dom": "^19.0.4",
 		"astro": "^5.5.3",
 		"astro-sst": "^3.1.2",
-		"sst": "^3.9.39"
+		"drizzle-orm": "^0.41.0",
+		"mysql2": "^3.14.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"sst": "^3.9.39",
+		"tailwindcss": "^4.0.15"
 	},
 	"devDependencies": {
 		"@hedgeco/tsconfig": "workspace:*"

@@ -1,0 +1,64 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { Login } from "~/components/Login";
+import { useAppSession } from "~/utils/session";
+
+export const loginFn = createServerFn()
+	.validator((d) => d as { email: string; password: string })
+	.handler(async ({ data }) => {
+		//todo-auth
+		// // Find the user
+		// const user = await prismaClient.user.findUnique({
+		//   where: {
+		//     email: data.email,
+		//   },
+		// })
+
+		// // Check if the user exists
+		// if (!user) {
+		//   return {
+		//     error: true,
+		//     userNotFound: true,
+		//     message: 'User not found',
+		//   }
+		// }
+
+		// // Check if the password is correct
+		// const hashedPassword = await hashPassword(data.password)
+
+		// if (user.password !== hashedPassword) {
+		//   return {
+		//     error: true,
+		//     message: 'Incorrect password',
+		//   }
+		// }
+
+		// // Create a session
+		// const session = await useAppSession()
+
+		// // Store the user's email in the session
+		// await session.update({
+		//   userEmail: user.email,
+		// })
+
+		const session = await useAppSession();
+
+		await session.update({
+			userEmail: `todo-${data.email}`,
+		});
+	});
+
+export const Route = createFileRoute("/_authed")({
+	beforeLoad: ({ context }) => {
+		if (!context.user) {
+			throw new Error("Not authenticated");
+		}
+	},
+	errorComponent: ({ error }) => {
+		if (error.message === "Not authenticated") {
+			return <Login />;
+		}
+
+		throw error;
+	},
+});

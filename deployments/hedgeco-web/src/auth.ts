@@ -37,13 +37,10 @@ export async function adminAuth(cookies: AstroCookies) {
 	if (!accessToken) {
 		return false;
 	}
-	console.log(accessToken, accessToken.value);
 
 	const verified = await client.verify(subjects, accessToken.value, {
 		refresh: refreshToken?.value,
 	});
-
-	console.log(verified);
 
 	if (verified.err) {
 		return false;

@@ -57,13 +57,29 @@ export default $config({
 				}),
 			},
 		});
+		const userAuth = new sst.aws.Auth("user-auth", {
+			issuer: {
+				handler: "deployments/user-auth/src/index.handler",
+				link: [noReplyEmail, hedgecoDatabase],
+				environment: {
+					validClients: JSON.stringify({
+						"hedgeco-web": isProduction
+							? [webDomain]
+							: [webDomain, "localhost"],
+					}),
+				},
+			},
+			domain: {
+				name: `user-auth.${rootDomain}`,
+				dns: sst.cloudflare.dns({
+					zone: hedgecoNetZoneId,
+				}),
+			},
+		});
 
 		new sst.aws.Service("hedgeco-web", {
 			cluster,
-			link: [adminAuth, hedgecoDatabase],
-			environment: {
-				adminAuthUrl: adminAuth.url,
-			},
+			link: [adminAuth, userAuth, hedgecoDatabase],
 			image: {
 				dockerfile: "deployments/hedgeco-web/dockerfile",
 			},
@@ -78,6 +94,27 @@ export default $config({
 			},
 			dev: {
 				directory: "deployments/hedgeco-web",
+				command: "bun run dev",
+			},
+		});
+
+		new sst.aws.Service("hedgeco-web-3", {
+			cluster,
+			link: [adminAuth, userAuth, hedgecoDatabase],
+			image: {
+				dockerfile: "deployments/hedgeco-web-3/dockerfile",
+			},
+			loadBalancer: {
+				domain: {
+					name: `v2-3.${rootDomain}`,
+					dns: sst.cloudflare.dns({
+						zone: hedgecoNetZoneId,
+					}),
+				},
+				ports: [{ listen: "80/http", forward: "3000/http" }],
+			},
+			dev: {
+				directory: "deployments/hedgeco-web-3",
 				command: "bun run dev",
 			},
 		});

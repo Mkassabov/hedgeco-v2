@@ -29,10 +29,19 @@ declare module "sst" {
       "type": "sst.aws.Service"
       "url": string
     }
+    "hedgeco-web-3": {
+      "service": string
+      "type": "sst.aws.Service"
+      "url": string
+    }
     "no-reply-email-service": {
       "configSet": string
       "sender": string
       "type": "sst.aws.Email"
+    }
+    "user-auth": {
+      "type": "sst.aws.Auth"
+      "url": string
     }
   }
 }

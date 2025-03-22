@@ -1,0 +1,73 @@
+---
+import { actions } from "astro:actions";
+import { adminAuth } from "../auth";
+import BaseLayout from "./base-layout.astro";
+
+const subject = await adminAuth(Astro.cookies);
+
+const logoutResult = Astro.getActionResult(actions.logout);
+if (logoutResult && !logoutResult.error) {
+	return Astro.redirect(logoutResult.data);
+}
+---
+
+<BaseLayout>
+	{
+		subject ? (
+			<>
+				<header class="bg-[#3280FF] text-white p-4">
+					<div class="container mx-auto flex justify-between items-center">
+						<div class="flex items-center space-x-6">
+							<h1 class="text-xl font-bold text-white">HedgeCo Admin</h1>
+							<nav>
+								<ul class="flex space-x-4">
+									<li>
+										<a
+											href="/admin/articles"
+											class="hover:text-gray-200 transition-colors"
+											class:list={[
+												{ underline: Astro.url.pathname === "/admin/articles" },
+											]}
+										>
+											Articles
+										</a>
+									</li>
+									<li>
+										<a
+											href="/admin/newsletter"
+											class="hover:text-gray-200 transition-colors"
+											class:list={[
+												{
+													underline: Astro.url.pathname === "/admin/newsletter",
+												},
+											]}
+										>
+											Newsletter
+										</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						<div class="flex items-center space-x-4">
+							{subject && (
+								<span class="text-sm text-white">
+									{subject.properties.email}
+								</span>
+							)}
+							<form method="POST" action={actions.logout}>
+								<button class="bg-white text-[#3280FF] hover:bg-gray-100 px-3 py-1 rounded text-sm transition-colors">
+									Logout
+								</button>
+							</form>
+						</div>
+					</div>
+				</header>
+				<slot />
+			</>
+		) : (
+			<>
+				<h1>subject not found</h1>
+			</>
+		)
+	}
+</BaseLayout>

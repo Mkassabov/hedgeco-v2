@@ -1,0 +1,32 @@
+---
+import { actions } from "astro:actions";
+import { newsArticles } from "@hedgeco/hedgeco-database";
+import { desc, eq } from "drizzle-orm";
+import { Articles } from "../../components/articles";
+import { db } from "../../db";
+import AdminLayout from "../../layouts/admin-layout.astro";
+
+const pageParam = Astro.url.searchParams.get("page") ?? "1";
+const page = Number(pageParam);
+const articleId = Number(Astro.url.searchParams.get("articleId")) ?? null;
+
+const preloadArticle = await db.query.newsArticles.findFirst({
+	where: eq(newsArticles.id, articleId),
+});
+
+const articleData = await db.query.newsArticles.findMany({
+	limit: 50,
+	orderBy: [desc(newsArticles.createdAt)],
+	offset: (page - 1) * 50,
+});
+---
+
+<AdminLayout>
+	<Articles
+		client:load
+		articles={articleData}
+		pageNumber={page}
+		articleId={articleId}
+		preloadArticle={preloadArticle}
+	/>
+</AdminLayout>

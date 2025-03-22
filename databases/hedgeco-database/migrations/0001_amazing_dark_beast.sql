@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `type` enum('newsOnly','serviceProvider','hedgeFundManager','investor') NOT NULL;

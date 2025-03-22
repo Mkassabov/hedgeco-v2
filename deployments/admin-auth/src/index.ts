@@ -30,7 +30,7 @@ async function getUser(email: string) {
 	const user = await db.query.adminUsers.findFirst({
 		where: eq(schema.adminUsers.email, email),
 	});
-	return user?.id;
+	return user;
 }
 
 function assertClaimFormat(
@@ -84,8 +84,8 @@ const app = issuer({
 					if (!assertClaimFormat(claims)) {
 						throw new Error("Invalid claim format");
 					}
-					const userId = await getUser(claims.email);
-					if (!userId) {
+					const user = await getUser(claims.email);
+					if (!user) {
 						return {
 							type: "invalid_claim" as const,
 							key: "email",
@@ -124,15 +124,16 @@ const app = issuer({
 		if (!assertClaimFormat(value.claims)) {
 			throw new Error("Invalid claim format");
 		}
-		const userId = await getUser(value.claims.email);
-		if (!userId) {
+		const user = await getUser(value.claims.email);
+		if (!user) {
 			//* we check the user id above, so this should only happen if
 			//* the user is deleted between signing in and the success callback
 			throw new Error("User not found");
 		}
 		if (value.provider === "code") {
 			return ctx.subject("adminUser", {
-				id: userId,
+				id: user.id,
+				email: user.email,
 			});
 		}
 		throw new Error("Invalid provider");
