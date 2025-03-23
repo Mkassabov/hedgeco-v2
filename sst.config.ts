@@ -117,6 +117,10 @@ export default $config({
 				directory: "deployments/hedgeco-web-3",
 				command: "bun run dev",
 			},
+			environment: {
+				VITE_ADMIN_AUTH_URL: adminAuth.url,
+				VITE_USER_AUTH_URL: userAuth.url,
+			},
 		});
 
 		//* dev resources

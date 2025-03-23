@@ -1,52 +1,33 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { subjects } from "@hedgeco/admin-auth";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { Login } from "~/components/Login";
-import { useAppSession } from "~/utils/session";
+import { getCookie, getHeaders } from "@tanstack/react-start/server";
+// import { Login } from "~/components/Login";
+import { client, setTokens } from "~/utils/auth";
 
-export const loginFn = createServerFn()
-	.validator((d) => d as { email: string; password: string })
-	.handler(async ({ data }) => {
-		//todo-auth
-		// // Find the user
-		// const user = await prismaClient.user.findUnique({
-		//   where: {
-		//     email: data.email,
-		//   },
-		// })
+export const loginFn = createServerFn().handler(async () => {
+	const accessToken = getCookie("access_token");
+	const refreshToken = getCookie("refresh_token");
 
-		// // Check if the user exists
-		// if (!user) {
-		//   return {
-		//     error: true,
-		//     userNotFound: true,
-		//     message: 'User not found',
-		//   }
-		// }
-
-		// // Check if the password is correct
-		// const hashedPassword = await hashPassword(data.password)
-
-		// if (user.password !== hashedPassword) {
-		//   return {
-		//     error: true,
-		//     message: 'Incorrect password',
-		//   }
-		// }
-
-		// // Create a session
-		// const session = await useAppSession()
-
-		// // Store the user's email in the session
-		// await session.update({
-		//   userEmail: user.email,
-		// })
-
-		const session = await useAppSession();
-
-		await session.update({
-			userEmail: `todo-${data.email}`,
+	if (accessToken) {
+		const verified = await client.verify(subjects, accessToken, {
+			refresh: refreshToken,
 		});
-	});
+		if (!verified.err && verified.tokens) {
+			setTokens(verified.tokens.access, verified.tokens.refresh);
+			throw redirect({ to: "/posts" });
+		}
+	}
+
+	const headers = await getHeaders();
+	const host = headers?.host ?? headers.Host ?? "";
+	const protocol = host?.includes("localhost") ? "http" : "https";
+	const { url } = await client.authorize(
+		`${protocol}://${host}/api/admin-auth-callback`,
+		"code",
+	);
+	throw redirect({ href: url });
+});
 
 export const Route = createFileRoute("/_authed")({
 	beforeLoad: ({ context }) => {
@@ -56,7 +37,7 @@ export const Route = createFileRoute("/_authed")({
 	},
 	errorComponent: ({ error }) => {
 		if (error.message === "Not authenticated") {
-			return <Login />;
+			return <span>Not authenticated</span>;
 		}
 
 		throw error;
