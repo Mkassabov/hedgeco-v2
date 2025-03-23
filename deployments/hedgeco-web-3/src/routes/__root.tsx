@@ -1,9 +1,11 @@
+import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	HeadContent,
 	Link,
 	Outlet,
 	Scripts,
-	createRootRoute,
+	createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { createServerFn, useServerFn } from "@tanstack/react-start";
@@ -26,7 +28,9 @@ const fetchUser = createServerFn({ method: "GET" }).handler(async () => {
 	return session.data.subject;
 });
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+	queryClient: QueryClient;
+}>()({
 	head: () => ({
 		meta: [
 			{
@@ -97,7 +101,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	const login = useServerFn(loginFn);
 
 	return (
-		<html>
+		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
@@ -144,6 +148,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<hr />
 				{children}
 				<TanStackRouterDevtools position="bottom-right" />
+				<ReactQueryDevtools buttonPosition="bottom-left" />
 				<Scripts />
 			</body>
 		</html>
