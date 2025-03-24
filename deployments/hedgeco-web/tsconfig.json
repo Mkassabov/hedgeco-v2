@@ -1,14 +1,10 @@
 {
-	"extends": ["astro/tsconfigs/strict"],
-	"include": [
-		".astro/types.d.ts",
-		"src/**/*",
-		"astro.config.mjs",
-		"sst-env.d.ts"
-	],
-	"exclude": ["dist"],
+	"include": ["**/*.ts", "**/*.tsx", "sst-env.d.ts"],
+	"extends": "@hedgeco/tsconfig/tanstack.json",
 	"compilerOptions": {
-		"jsx": "react-jsx",
-		"jsxImportSource": "react"
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./src/*"]
+		}
 	}
 }

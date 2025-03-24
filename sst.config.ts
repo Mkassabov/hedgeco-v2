@@ -90,31 +90,10 @@ export default $config({
 						zone: hedgecoNetZoneId,
 					}),
 				},
-				ports: [{ listen: "80/http", forward: "4321/http" }],
-			},
-			dev: {
-				directory: "deployments/hedgeco-web",
-				command: "bun run dev",
-			},
-		});
-
-		new sst.aws.Service("hedgeco-web-3", {
-			cluster,
-			link: [adminAuth, userAuth, hedgecoDatabase],
-			image: {
-				dockerfile: "deployments/hedgeco-web-3/dockerfile",
-			},
-			loadBalancer: {
-				domain: {
-					name: `v2-3.${rootDomain}`,
-					dns: sst.cloudflare.dns({
-						zone: hedgecoNetZoneId,
-					}),
-				},
 				ports: [{ listen: "80/http", forward: "3000/http" }],
 			},
 			dev: {
-				directory: "deployments/hedgeco-web-3",
+				directory: "deployments/hedgeco-web",
 				command: "bun run dev",
 			},
 			environment: {

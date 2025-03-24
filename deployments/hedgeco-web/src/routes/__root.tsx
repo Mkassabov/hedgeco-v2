@@ -2,17 +2,15 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
 	HeadContent,
-	Link,
 	Outlet,
 	Scripts,
 	createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { createServerFn, useServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@tanstack/react-start";
 import type * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
 import { NotFound } from "~/components/NotFound.js";
-import { loginFn } from "~/routes/_authed";
 import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo.js";
 import { useAppSession } from "~/utils/session.js";
@@ -96,59 +94,25 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-	const { user } = Route.useRouteContext();
-
-	const login = useServerFn(loginFn);
-
 	return (
 		<html lang="en">
 			<head>
 				<HeadContent />
 			</head>
-			<body>
-				<div className="p-2 flex gap-2 text-lg">
-					<Link
-						to="/"
-						activeProps={{
-							className: "font-bold",
-						}}
-						activeOptions={{ exact: true }}
-					>
-						Home
-					</Link>{" "}
-					<Link
-						to="/articles"
-						activeProps={{
-							className: "font-bold",
-						}}
-					>
-						Articles
-					</Link>
-					<div className="ml-auto">
-						{user ? (
-							<>
-								<span className="mr-2">{user.properties.email}</span>
-								<Link to="/logout">Logout</Link>
-							</>
-						) : (
-							//todo this is a workaround since sst linking isn't working :/
-							// <a href={import.meta.env.VITE_ADMIN_AUTH_URL}>Login</a>
-							<form
-								onSubmit={(e) => {
-									e.preventDefault();
-									login();
-								}}
-								className="space-y-4"
-							>
-								<button type="submit">Login</button>
-							</form>
-						)}
-					</div>
-				</div>
-				<hr />
+			<body className="flex flex-col">
 				{children}
-				<TanStackRouterDevtools position="bottom-right" />
-				<ReactQueryDevtools buttonPosition="bottom-left" />
+				{process.env.NODE_ENV === "development" && (
+					<div className="h-30 border-t border-gray-700">
+						<div className="m-2">
+							<button type="button">
+								<TanStackRouterDevtools position="bottom-right" />
+							</button>
+							<button type="button">
+								<ReactQueryDevtools buttonPosition="relative" />
+							</button>
+						</div>
+					</div>
+				)}
 				<Scripts />
 			</body>
 		</html>
