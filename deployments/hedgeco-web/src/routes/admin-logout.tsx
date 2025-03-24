@@ -6,15 +6,18 @@ import { useAppSession } from "~/utils/session";
 const logoutFn = createServerFn().handler(async () => {
 	const session = await useAppSession();
 	await session.clear();
-	deleteCookie("access_token");
-	deleteCookie("refresh_token");
+	deleteCookie("admin_access_token");
+	deleteCookie("admin_refresh_token");
 
 	throw redirect({
 		href: "/",
 	});
 });
 
-export const Route = createFileRoute("/logout")({
+export const Route = createFileRoute("/admin-logout")({
 	preload: false,
-	loader: () => logoutFn(),
+	loader: ({ context }) => {
+		context.queryClient.clear();
+		return logoutFn();
+	},
 });

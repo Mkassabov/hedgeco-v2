@@ -94,6 +94,12 @@ function ArticlesComponent() {
 					});
 				}
 			}
+			if (event.key === "c") {
+				return navigate({
+					to: "/admin/articles/new",
+					search: (prev) => ({ page: prev.page }),
+				});
+			}
 		};
 
 		document.addEventListener("keydown", handleKeyDown);

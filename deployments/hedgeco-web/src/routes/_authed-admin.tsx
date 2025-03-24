@@ -10,8 +10,8 @@ import { getCookie, getHeaders } from "@tanstack/react-start/server";
 import { client, setTokens } from "~/utils/auth";
 
 export const loginFn = createServerFn().handler(async () => {
-	const accessToken = getCookie("access_token");
-	const refreshToken = getCookie("refresh_token");
+	const accessToken = getCookie("admin_access_token");
+	const refreshToken = getCookie("admin_refresh_token");
 
 	if (accessToken) {
 		const verified = await client.verify(
@@ -41,7 +41,7 @@ export const loginFn = createServerFn().handler(async () => {
 
 export const Route = createFileRoute("/_authed-admin")({
 	beforeLoad: ({ context }) => {
-		if (context.user == null) {
+		if (context.adminUser == null) {
 			throw new Error("Not authenticated");
 		}
 	},
@@ -53,7 +53,7 @@ export const Route = createFileRoute("/_authed-admin")({
 		throw error;
 	},
 	component: () => {
-		const { user } = Route.useRouteContext();
+		const { adminUser } = Route.useRouteContext();
 
 		const login = useServerFn(loginFn);
 
@@ -88,10 +88,10 @@ export const Route = createFileRoute("/_authed-admin")({
 						Articles
 					</Link>
 					<div className="ml-auto">
-						{user ? (
+						{adminUser ? (
 							<>
-								<span className="mr-2">{user.properties.email}</span>
-								<Link to="/logout">Logout</Link>
+								<span className="mr-2">{adminUser.properties.email}</span>
+								<Link to="/admin-logout">Logout</Link>
 							</>
 						) : (
 							<form

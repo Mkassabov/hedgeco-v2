@@ -10,13 +10,13 @@ export const client = createClient({
 });
 
 export function setTokens(access: string, refresh: string) {
-	setCookie("access_token", access, {
+	setCookie("admin_access_token", access, {
 		httpOnly: true,
 		sameSite: "lax",
 		path: "/",
 		maxAge: 34560000,
 	});
-	setCookie("refresh_token", refresh, {
+	setCookie("admin_refresh_token", refresh, {
 		httpOnly: true,
 		sameSite: "lax",
 		path: "/",
@@ -28,8 +28,9 @@ export async function adminAuth(overrideTokens?: {
 	access: string;
 	refresh: string;
 }) {
-	const accessToken = overrideTokens?.access ?? getCookie("access_token");
-	const refreshToken = overrideTokens?.refresh ?? getCookie("refresh_token");
+	const accessToken = overrideTokens?.access ?? getCookie("admin_access_token");
+	const refreshToken =
+		overrideTokens?.refresh ?? getCookie("admin_refresh_token");
 
 	if (!accessToken) {
 		return false;

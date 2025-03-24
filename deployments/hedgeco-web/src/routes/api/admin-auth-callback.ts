@@ -3,7 +3,7 @@ import { adminAuth, client, setTokens } from "~/utils/auth";
 import { useAppSession } from "~/utils/session";
 
 export const APIRoute = createAPIFileRoute("/api/admin-auth-callback")({
-	GET: async ({ request, params }) => {
+	GET: async ({ request }) => {
 		const url = new URL(request.url);
 		const code = url.searchParams.get("code");
 
@@ -41,11 +41,11 @@ export const APIRoute = createAPIFileRoute("/api/admin-auth-callback")({
 		}
 
 		await setTokens(exchanged.tokens.access, exchanged.tokens.refresh);
-		const subject = await adminAuth({
+		const adminSubject = await adminAuth({
 			access: exchanged.tokens.access,
 			refresh: exchanged.tokens.refresh,
 		});
-		if (!subject) {
+		if (!adminSubject) {
 			return new Response(
 				JSON.stringify({
 					message: "Failed to get subject",
@@ -59,8 +59,8 @@ export const APIRoute = createAPIFileRoute("/api/admin-auth-callback")({
 			);
 		}
 		const session = await useAppSession();
-		await session.update({ subject });
+		await session.update({ adminSubject });
 
-		return Response.redirect(url.origin);
+		return Response.redirect(`${url.origin}/admin`);
 	},
 });

@@ -13,7 +13,7 @@ import { db } from "~/utils/db";
 
 export const fetchArticleQueryOptions = (articleId: number) => {
 	return queryOptions({
-		queryKey: ["article", articleId],
+		queryKey: ["admin-rticle", articleId],
 		queryFn: () => fetchArticle({ data: articleId }),
 		retry: (failureCount, error) => {
 			if (isNotFound(error)) {
@@ -39,12 +39,12 @@ export const fetchArticle = createServerFn({ method: "GET" })
 		return newsArticle;
 	});
 
-export const ARTICLE_PAGE_SIZE = 5;
+export const ARTICLE_PAGE_SIZE = 10;
 
 export const fetchArticlesQueryOptions = (page: number) => {
 	const usablePage = page - 1;
 	return queryOptions({
-		queryKey: ["articles", usablePage],
+		queryKey: ["admin-articles", usablePage],
 		queryFn: () => fetchArticles({ data: { page: usablePage } }),
 	});
 };
@@ -171,4 +171,53 @@ export const createArticle = createServerFn({ method: "POST" })
 			articleContent: data.articleContent,
 		});
 		return response[0].insertId;
+	});
+
+export const PUBLIC_ARTICLE_PAGE_SIZE = 50;
+
+export const fetchPublicArticlesQueryOptions = (page: number) => {
+	const usablePage = page - 1;
+	return queryOptions({
+		queryKey: ["articles", usablePage],
+		queryFn: () => fetchPublicArticles({ data: { page: usablePage } }),
+	});
+};
+
+export const fetchPublicArticles = createServerFn({ method: "GET" })
+	.validator((options: { page: number }) => options)
+	.handler(async ({ data }) => {
+		const newsArticles = await db.query.newsArticles.findMany({
+			offset: data.page * PUBLIC_ARTICLE_PAGE_SIZE,
+			limit: PUBLIC_ARTICLE_PAGE_SIZE,
+			orderBy: [desc(schema.newsArticles.id)],
+		});
+
+		return newsArticles;
+	});
+
+export const fetchPublicArticleQueryOptions = (articleId: number) => {
+	return queryOptions({
+		queryKey: ["article", articleId],
+		queryFn: () => fetchPublicArticle({ data: articleId }),
+		retry: (failureCount, error) => {
+			if (isNotFound(error)) {
+				return false;
+			}
+			return failureCount < 3;
+		},
+	});
+};
+
+export const fetchPublicArticle = createServerFn({ method: "GET" })
+	.validator((articleId: number) => articleId)
+	.handler(async ({ data }) => {
+		const newsArticle = await db.query.newsArticles.findFirst({
+			where: eq(schema.newsArticles.id, data),
+		});
+
+		if (!newsArticle) {
+			throw notFound();
+		}
+
+		return newsArticle;
 	});

@@ -15,15 +15,13 @@ import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo.js";
 import { useAppSession } from "~/utils/session.js";
 
-const fetchUser = createServerFn({ method: "GET" }).handler(async () => {
+const fetchAdminUser = createServerFn({ method: "GET" }).handler(async () => {
 	// We need to auth on the server so we have access to secure cookies
 	const session = await useAppSession();
-
-	if (!session.data.subject) {
+	if (!session.data.adminSubject) {
 		return null;
 	}
-
-	return session.data.subject;
+	return session.data.adminSubject;
 });
 
 export const Route = createRootRouteWithContext<{
@@ -68,10 +66,11 @@ export const Route = createRootRouteWithContext<{
 		],
 	}),
 	beforeLoad: async () => {
-		const user = await fetchUser();
+		const adminUser = await fetchAdminUser();
 
 		return {
-			user,
+			adminUser,
+			user: null,
 		};
 	},
 	errorComponent: (props) => {
