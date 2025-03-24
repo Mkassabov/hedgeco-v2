@@ -117,12 +117,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 						Home
 					</Link>{" "}
 					<Link
-						to="/posts"
+						to="/articles"
 						activeProps={{
 							className: "font-bold",
 						}}
 					>
-						Posts
+						Articles
 					</Link>
 					<div className="ml-auto">
 						{user ? (

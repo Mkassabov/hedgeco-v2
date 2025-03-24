@@ -2,7 +2,6 @@ import { subjects } from "@hedgeco/admin-auth";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, getHeaders } from "@tanstack/react-start/server";
-// import { Login } from "~/components/Login";
 import { client, setTokens } from "~/utils/auth";
 
 export const loginFn = createServerFn().handler(async () => {
@@ -10,12 +9,18 @@ export const loginFn = createServerFn().handler(async () => {
 	const refreshToken = getCookie("refresh_token");
 
 	if (accessToken) {
-		const verified = await client.verify(subjects, accessToken, {
-			refresh: refreshToken,
-		});
+		const verified = await client.verify(
+			subjects,
+			accessToken,
+			refreshToken
+				? {
+						refresh: refreshToken,
+					}
+				: undefined,
+		);
 		if (!verified.err && verified.tokens) {
 			setTokens(verified.tokens.access, verified.tokens.refresh);
-			throw redirect({ to: "/posts" });
+			throw redirect({ to: "/articles" });
 		}
 	}
 
@@ -31,7 +36,7 @@ export const loginFn = createServerFn().handler(async () => {
 
 export const Route = createFileRoute("/_authed")({
 	beforeLoad: ({ context }) => {
-		if (!context.user) {
+		if (context.user == null) {
 			throw new Error("Not authenticated");
 		}
 	},

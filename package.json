@@ -10,6 +10,6 @@
 	},
 	"workspaces": ["libraries/*", "deployments/*", "databases/*"],
 	"dependencies": {
-		"sst": "^3.9.39"
+		"sst": "^3.9.44"
 	}
 }
