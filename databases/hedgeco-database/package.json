@@ -10,7 +10,7 @@
 	},
 	"dependencies": {
 		"drizzle-kit": "^0.30.5",
-		"drizzle-orm": "^0.40.1",
+		"drizzle-orm": "^0.41.0",
 		"mysql2": "^3.14.0",
 		"sst": "^3.9.44"
 	},

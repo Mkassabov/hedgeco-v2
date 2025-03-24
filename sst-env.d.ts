@@ -34,6 +34,10 @@ declare module "sst" {
       "sender": string
       "type": "sst.aws.Email"
     }
+    "user-auth": {
+      "type": "sst.aws.Auth"
+      "url": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />

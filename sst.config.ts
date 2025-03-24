@@ -27,8 +27,11 @@ export default $config({
 			bastion: true,
 		});
 		const cluster = new sst.aws.Cluster("hedgeco-cluster", { vpc: hedgecoVpc });
+		//todo this is ugly cause we did local before prod
 		const noReplyEmail = new sst.aws.Email("no-reply-email-service", {
-			sender: "no-reply@hedgeco.net",
+			sender: isProduction
+				? "no-reply@hedgeco.net"
+				: `no-reply+${$app.stage}@localhost`,
 		});
 
 		//* databases
@@ -57,13 +60,29 @@ export default $config({
 				}),
 			},
 		});
+		const userAuth = new sst.aws.Auth("user-auth", {
+			issuer: {
+				handler: "deployments/user-auth/src/index.handler",
+				link: [noReplyEmail, hedgecoDatabase],
+				environment: {
+					validClients: JSON.stringify({
+						"hedgeco-web": isProduction
+							? [webDomain]
+							: [webDomain, "localhost"],
+					}),
+				},
+			},
+			domain: {
+				name: `user-auth.${rootDomain}`,
+				dns: sst.cloudflare.dns({
+					zone: hedgecoNetZoneId,
+				}),
+			},
+		});
 
 		new sst.aws.Service("hedgeco-web", {
 			cluster,
-			link: [adminAuth, hedgecoDatabase],
-			environment: {
-				adminAuthUrl: adminAuth.url,
-			},
+			link: [adminAuth, userAuth, hedgecoDatabase],
 			image: {
 				dockerfile: "deployments/hedgeco-web/dockerfile",
 			},
@@ -74,11 +93,15 @@ export default $config({
 						zone: hedgecoNetZoneId,
 					}),
 				},
-				ports: [{ listen: "80/http", forward: "4321/http" }],
+				ports: [{ listen: "80/http", forward: "3000/http" }],
 			},
 			dev: {
 				directory: "deployments/hedgeco-web",
 				command: "bun run dev",
+			},
+			environment: {
+				VITE_ADMIN_AUTH_URL: adminAuth.url,
+				VITE_USER_AUTH_URL: userAuth.url,
 			},
 		});
 
