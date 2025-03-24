@@ -27,8 +27,11 @@ export default $config({
 			bastion: true,
 		});
 		const cluster = new sst.aws.Cluster("hedgeco-cluster", { vpc: hedgecoVpc });
+		//todo this is ugly cause we did local before prod
 		const noReplyEmail = new sst.aws.Email("no-reply-email-service", {
-			sender: "no-reply@hedgeco.net",
+			sender: isProduction
+				? "no-reply@hedgeco.net"
+				: `no-reply+${$app.stage}@localhost`,
 		});
 
 		//* databases
