@@ -1,5 +1,5 @@
 {
-	"name": "tanstack-start-example-basic-auth",
+	"name": "@hedgeco/hedgeco-web",
 	"private": true,
 	"sideEffects": false,
 	"type": "module",

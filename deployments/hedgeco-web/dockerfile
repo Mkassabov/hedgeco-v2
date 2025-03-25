@@ -11,6 +11,7 @@ RUN bun install
 
 FROM build-deps AS build
 COPY . .
+RUN ls -la
 RUN bun run build
 
 FROM base AS runtime
