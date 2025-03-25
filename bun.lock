@@ -46,6 +46,7 @@
       "dependencies": {
         "@hedgeco/admin-auth": "workspace:*",
         "@hedgeco/hedgeco-database": "workspace:*",
+        "@hedgeco/user-auth": "workspace:*",
         "@tanstack/react-query": "^5.66.0",
         "@tanstack/react-query-devtools": "^5.66.0",
         "@tanstack/react-router": "^1.114.27",

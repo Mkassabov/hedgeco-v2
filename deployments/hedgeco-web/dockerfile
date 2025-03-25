@@ -1,25 +1,31 @@
 FROM oven/bun:1 AS base
 WORKDIR /app
 
-COPY package.json ./
-# todo copy bun lock file somehow
+COPY ../../package.json .
+COPY ../../bun.lockb .
 
 FROM base AS prod-deps
-RUN bun install --omit=dev
+RUN bun install --omit=dev --frozen-lockfile
 
 FROM base AS build-deps
 RUN bun install
 
 FROM build-deps AS build
-COPY . .
-RUN ls -la
+COPY ../../databases/hedgeco-database ./databases/hedgeco-database
+COPY ../../deployments/admin-auth ./deployments/admin-auth
+COPY ../../deployments/user-auth ./deployments/user-auth
+COPY . ./deployments/hedgeco-web
+COPY ../../libraries/tsconfig ./libraries/tsconfig
+
+WORKDIR /app/deployments/hedgeco-web
 RUN bun run build
 
 FROM base AS runtime
 COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
+COPY --from=prod-deps /app/deployments/hedgeco-web/node_modules ./deployments/hedgeco-web/node_modules
+COPY --from=build /app/deployments/hedgeco-web/dist ./deployments/hedgeco-web/dist
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
 EXPOSE 3000
-CMD bun run dist/server/index.mjs
+CMD bun run deployments/hedgeco-web/dist/server/index.mjs
