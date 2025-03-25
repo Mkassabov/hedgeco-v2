@@ -31,7 +31,7 @@ export default $config({
 		const noReplyEmail = new sst.aws.Email("no-reply-email-service", {
 			sender: isProduction
 				? "no-reply@hedgeco.net"
-				: `no-reply+${$app.stage}@localhost`,
+				: `no-reply+${$app.stage}@hedgeco.net`,
 		});
 
 		//* databases
