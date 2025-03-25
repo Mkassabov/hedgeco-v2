@@ -23,7 +23,7 @@ const connection = await createConnection({
 
 const db = drizzle(connection, { schema, mode: "default" });
 
-const client = new SESv2Client();
+const sesClient = new SESv2Client();
 
 async function getUser(email: string) {
 	// Get user from database and return user ID
@@ -92,7 +92,7 @@ const app = issuer({
 							value: claims.email,
 						} satisfies CodeProviderError;
 					}
-					await client.send(
+					await sesClient.send(
 						new SendEmailCommand({
 							// biome-ignore lint/style/useNamingConvention: <explanation>
 							FromEmailAddress: Resource["no-reply-email-service"].sender,

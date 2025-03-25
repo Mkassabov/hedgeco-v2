@@ -15,6 +15,7 @@ import { Route as AdminLogoutImport } from './routes/admin-logout'
 import { Route as PublicImport } from './routes/_public'
 import { Route as AuthedAdminImport } from './routes/_authed-admin'
 import { Route as PublicIndexImport } from './routes/_public/index'
+import { Route as PublicContactUsImport } from './routes/_public/contact-us'
 import { Route as PublicAboutUsImport } from './routes/_public/about-us'
 import { Route as PublicNewsRouteImport } from './routes/_public/news/route'
 import { Route as PublicNewsIndexImport } from './routes/_public/news/index'
@@ -47,6 +48,12 @@ const AuthedAdminRoute = AuthedAdminImport.update({
 const PublicIndexRoute = PublicIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicContactUsRoute = PublicContactUsImport.update({
+  id: '/contact-us',
+  path: '/contact-us',
   getParentRoute: () => PublicRoute,
 } as any)
 
@@ -152,6 +159,13 @@ declare module '@tanstack/react-router' {
       path: '/about-us'
       fullPath: '/about-us'
       preLoaderRoute: typeof PublicAboutUsImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/contact-us': {
+      id: '/_public/contact-us'
+      path: '/contact-us'
+      fullPath: '/contact-us'
+      preLoaderRoute: typeof PublicContactUsImport
       parentRoute: typeof PublicImport
     }
     '/_public/': {
@@ -273,6 +287,7 @@ const PublicNewsRouteRouteWithChildren = PublicNewsRouteRoute._addFileChildren(
 interface PublicRouteChildren {
   PublicNewsRouteRoute: typeof PublicNewsRouteRouteWithChildren
   PublicAboutUsRoute: typeof PublicAboutUsRoute
+  PublicContactUsRoute: typeof PublicContactUsRoute
   PublicIndexRoute: typeof PublicIndexRoute
   PublicLegalDocLegalDocumentNameRoute: typeof PublicLegalDocLegalDocumentNameRoute
 }
@@ -280,6 +295,7 @@ interface PublicRouteChildren {
 const PublicRouteChildren: PublicRouteChildren = {
   PublicNewsRouteRoute: PublicNewsRouteRouteWithChildren,
   PublicAboutUsRoute: PublicAboutUsRoute,
+  PublicContactUsRoute: PublicContactUsRoute,
   PublicIndexRoute: PublicIndexRoute,
   PublicLegalDocLegalDocumentNameRoute: PublicLegalDocLegalDocumentNameRoute,
 }
@@ -292,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/admin-logout': typeof AdminLogoutRoute
   '/news': typeof PublicNewsRouteRouteWithChildren
   '/about-us': typeof PublicAboutUsRoute
+  '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/news/$articleId': typeof PublicNewsArticleIdRoute
@@ -307,6 +324,7 @@ export interface FileRoutesByTo {
   '': typeof AuthedAdminRouteWithChildren
   '/admin-logout': typeof AdminLogoutRoute
   '/about-us': typeof PublicAboutUsRoute
+  '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/news/$articleId': typeof PublicNewsArticleIdRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
@@ -324,6 +342,7 @@ export interface FileRoutesById {
   '/admin-logout': typeof AdminLogoutRoute
   '/_public/news': typeof PublicNewsRouteRouteWithChildren
   '/_public/about-us': typeof PublicAboutUsRoute
+  '/_public/contact-us': typeof PublicContactUsRoute
   '/_public/': typeof PublicIndexRoute
   '/_authed-admin/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/_public/news/$articleId': typeof PublicNewsArticleIdRoute
@@ -342,6 +361,7 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/news'
     | '/about-us'
+    | '/contact-us'
     | '/'
     | '/admin/articles'
     | '/news/$articleId'
@@ -356,6 +376,7 @@ export interface FileRouteTypes {
     | ''
     | '/admin-logout'
     | '/about-us'
+    | '/contact-us'
     | '/'
     | '/news/$articleId'
     | '/admin'
@@ -371,6 +392,7 @@ export interface FileRouteTypes {
     | '/admin-logout'
     | '/_public/news'
     | '/_public/about-us'
+    | '/_public/contact-us'
     | '/_public/'
     | '/_authed-admin/admin/articles'
     | '/_public/news/$articleId'
@@ -422,6 +444,7 @@ export const routeTree = rootRoute
       "children": [
         "/_public/news",
         "/_public/about-us",
+        "/_public/contact-us",
         "/_public/",
         "/_public/legal/doc/$legalDocumentName"
       ]
@@ -439,6 +462,10 @@ export const routeTree = rootRoute
     },
     "/_public/about-us": {
       "filePath": "_public/about-us.tsx",
+      "parent": "/_public"
+    },
+    "/_public/contact-us": {
+      "filePath": "_public/contact-us.tsx",
       "parent": "/_public"
     },
     "/_public/": {

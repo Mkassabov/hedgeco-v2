@@ -1,15 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_public/about-us")({
-	component: RouteComponent,
+	component: AboutUsComponent,
 });
 
-function RouteComponent() {
+function AboutUsComponent() {
 	return (
-		<div>
+		<>
+			<h1 className="text-cyan-900 text-2xl font-bold mt-5">About HedgeCo</h1>
+			<hr />
 			<div className="max-w-[60rem]">
-				<h1 className="text-2xl font-bold">About HedgeCo</h1>
-				<br />
 				<br />
 				HedgeCo was founded with the goal of to encourage transparency and
 				enable easy communication between hedge funds and accredited investors.
@@ -69,6 +69,6 @@ function RouteComponent() {
 				<br />
 				<br />
 			</div>
-		</div>
+		</>
 	);
 }
