@@ -111,7 +111,7 @@ function ArticlesComponent() {
 
 	return (
 		<div className="flex h-full">
-			<ul className="list-disc w-48 h-full flex flex-col">
+			<ul className="list-disc min-w-48 h-full flex flex-col">
 				<Link
 					to="/admin/articles/new"
 					className="border-b border-gray-700 h-14 flex items-center justify-center group"

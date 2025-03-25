@@ -145,7 +145,8 @@ function RouteComponent() {
 							<li>
 								<Link
 									className="border-dotted border-b-white border-b-[1px] hover:border-solid"
-									to="/legal/terms-of-use"
+									to="/legal/doc/$legalDocumentName"
+									params={{ legalDocumentName: "terms-of-use" }}
 								>
 									Terms of Use
 								</Link>
@@ -153,7 +154,8 @@ function RouteComponent() {
 							<li>
 								<Link
 									className="border-dotted border-b-white border-b-[1px] hover:border-solid"
-									to="/legal/privacy-policy"
+									to="/legal/doc/$legalDocumentName"
+									params={{ legalDocumentName: "privacy-policy" }}
 								>
 									Privacy Policy
 								</Link>
@@ -224,13 +226,23 @@ function RouteComponent() {
 							<Link to="/jobs">Jobs</Link>
 						</span>
 						<span className="text-[11px]">
-							<Link to="/legal/terms-and-conditions">Terms and Conditions</Link>
+							<Link
+								to="/legal/doc/$legalDocumentName"
+								params={{ legalDocumentName: "terms-of-use" }}
+							>
+								Terms of Use
+							</Link>
 						</span>
 					</div>
 					<div className="flex-grow" />
 					<div className="flex gap-4">
 						<span className="text-[11px]">
-							<Link to="/legal/privacy-policy">hedgeCo Privacy</Link>
+							<Link
+								to="/legal/doc/$legalDocumentName"
+								params={{ legalDocumentName: "privacy-policy" }}
+							>
+								hedgeCo Privacy
+							</Link>
 						</span>
 						<span className="text-[11px]">
 							<a href="mailto:evan@hedgeco.net">Advertise</a>

@@ -21,6 +21,7 @@ import { Route as AuthedAdminAdminIndexImport } from './routes/_authed-admin/adm
 import { Route as PublicNewsArticleIdImport } from './routes/_public/news/$articleId'
 import { Route as AuthedAdminAdminArticlesRouteImport } from './routes/_authed-admin/admin/articles/route'
 import { Route as AuthedAdminAdminArticlesIndexImport } from './routes/_authed-admin/admin/articles/index'
+import { Route as PublicLegalDocLegalDocumentNameImport } from './routes/_public/legal/doc.$legalDocumentName'
 import { Route as AuthedAdminAdminArticlesNewImport } from './routes/_authed-admin/admin/articles/new'
 import { Route as AuthedAdminAdminArticlesArticleIdImport } from './routes/_authed-admin/admin/articles/$articleId'
 
@@ -84,6 +85,13 @@ const AuthedAdminAdminArticlesIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthedAdminAdminArticlesRouteRoute,
+  } as any)
+
+const PublicLegalDocLegalDocumentNameRoute =
+  PublicLegalDocLegalDocumentNameImport.update({
+    id: '/legal/doc/$legalDocumentName',
+    path: '/legal/doc/$legalDocumentName',
+    getParentRoute: () => PublicRoute,
   } as any)
 
 const AuthedAdminAdminArticlesNewRoute =
@@ -181,6 +189,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminAdminArticlesNewImport
       parentRoute: typeof AuthedAdminAdminArticlesRouteImport
     }
+    '/_public/legal/doc/$legalDocumentName': {
+      id: '/_public/legal/doc/$legalDocumentName'
+      path: '/legal/doc/$legalDocumentName'
+      fullPath: '/legal/doc/$legalDocumentName'
+      preLoaderRoute: typeof PublicLegalDocLegalDocumentNameImport
+      parentRoute: typeof PublicImport
+    }
     '/_authed-admin/admin/articles/': {
       id: '/_authed-admin/admin/articles/'
       path: '/'
@@ -244,11 +259,13 @@ const PublicNewsRouteRouteWithChildren = PublicNewsRouteRoute._addFileChildren(
 interface PublicRouteChildren {
   PublicNewsRouteRoute: typeof PublicNewsRouteRouteWithChildren
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicLegalDocLegalDocumentNameRoute: typeof PublicLegalDocLegalDocumentNameRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicNewsRouteRoute: PublicNewsRouteRouteWithChildren,
   PublicIndexRoute: PublicIndexRoute,
+  PublicLegalDocLegalDocumentNameRoute: PublicLegalDocLegalDocumentNameRoute,
 }
 
 const PublicRouteWithChildren =
@@ -265,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/news/': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
 }
 
@@ -277,6 +295,7 @@ export interface FileRoutesByTo {
   '/news': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesIndexRoute
 }
 
@@ -293,6 +312,7 @@ export interface FileRoutesById {
   '/_public/news/': typeof PublicNewsIndexRoute
   '/_authed-admin/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/_authed-admin/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/_public/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/_authed-admin/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
 }
 
@@ -309,6 +329,7 @@ export interface FileRouteTypes {
     | '/news/'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/legal/doc/$legalDocumentName'
     | '/admin/articles/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -320,6 +341,7 @@ export interface FileRouteTypes {
     | '/news'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/legal/doc/$legalDocumentName'
     | '/admin/articles'
   id:
     | '__root__'
@@ -334,6 +356,7 @@ export interface FileRouteTypes {
     | '/_public/news/'
     | '/_authed-admin/admin/articles/$articleId'
     | '/_authed-admin/admin/articles/new'
+    | '/_public/legal/doc/$legalDocumentName'
     | '/_authed-admin/admin/articles/'
   fileRoutesById: FileRoutesById
 }
@@ -376,7 +399,8 @@ export const routeTree = rootRoute
       "filePath": "_public.tsx",
       "children": [
         "/_public/news",
-        "/_public/"
+        "/_public/",
+        "/_public/legal/doc/$legalDocumentName"
       ]
     },
     "/admin-logout": {
@@ -422,6 +446,10 @@ export const routeTree = rootRoute
     "/_authed-admin/admin/articles/new": {
       "filePath": "_authed-admin/admin/articles/new.tsx",
       "parent": "/_authed-admin/admin/articles"
+    },
+    "/_public/legal/doc/$legalDocumentName": {
+      "filePath": "_public/legal/doc.$legalDocumentName.tsx",
+      "parent": "/_public"
     },
     "/_authed-admin/admin/articles/": {
       "filePath": "_authed-admin/admin/articles/index.tsx",

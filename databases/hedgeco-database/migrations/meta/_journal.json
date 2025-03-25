@@ -15,6 +15,20 @@
       "when": 1742577903895,
       "tag": "0001_amazing_dark_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1742901150111,
+      "tag": "0002_volatile_silver_surfer",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1742901525669,
+      "tag": "0003_adorable_la_nuit",
+      "breakpoints": true
     }
   ]
 }
