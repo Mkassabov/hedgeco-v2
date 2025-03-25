@@ -21,11 +21,11 @@ WORKDIR /app/deployments/hedgeco-web
 RUN bun run build
 
 FROM base AS runtime
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=prod-deps /app/deployments/hedgeco-web/node_modules ./deployments/hedgeco-web/node_modules
-COPY --from=build /app/deployments/hedgeco-web/dist ./deployments/hedgeco-web/dist
+COPY --from=prod-deps /app/node_modules ../../node_modules
+COPY --from=prod-deps /app/deployments/hedgeco-web/node_modules ./node_modules
+COPY --from=build /app/deployments/hedgeco-web/dist ./dist
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
 EXPOSE 3000
-CMD bun run deployments/hedgeco-web/dist/server/index.mjs
+CMD bun run ./dist/server/index.mjs
