@@ -1,8 +1,8 @@
 FROM oven/bun:1 AS base
 WORKDIR /app
 
-COPY ../../package.json .
-COPY ../../bun.lockb .
+COPY ./package.json .
+COPY ./bun.lockb .
 
 FROM base AS prod-deps
 RUN bun install --omit=dev --frozen-lockfile
@@ -11,11 +11,11 @@ FROM base AS build-deps
 RUN bun install
 
 FROM build-deps AS build
-COPY ../../databases/hedgeco-database ./databases/hedgeco-database
-COPY ../../deployments/admin-auth ./deployments/admin-auth
-COPY ../../deployments/user-auth ./deployments/user-auth
-COPY . ./deployments/hedgeco-web
-COPY ../../libraries/tsconfig ./libraries/tsconfig
+COPY ./databases/hedgeco-database ./databases/hedgeco-database
+COPY ./deployments/admin-auth ./deployments/admin-auth
+COPY ./deployments/user-auth ./deployments/user-auth
+COPY ./deployments/hedgeco-web ./deployments/hedgeco-web
+COPY ./libraries/tsconfig ./libraries/tsconfig
 
 WORKDIR /app/deployments/hedgeco-web
 RUN bun run build

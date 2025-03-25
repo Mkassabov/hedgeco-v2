@@ -84,7 +84,6 @@ export default $config({
 			cluster,
 			link: [adminAuth, userAuth, hedgecoDatabase],
 			image: {
-				context: "deployments/hedgeco-web",
 				dockerfile: "deployments/hedgeco-web/dockerfile",
 			},
 			loadBalancer: {
