@@ -4,13 +4,13 @@ WORKDIR /app
 COPY ./package.json .
 COPY ./bun.lock .
 
-RUN bun install
-
 COPY ./databases/hedgeco-database ./databases/hedgeco-database
 COPY ./deployments/admin-auth ./deployments/admin-auth
 COPY ./deployments/user-auth ./deployments/user-auth
 COPY ./deployments/hedgeco-web ./deployments/hedgeco-web
 COPY ./libraries/tsconfig ./libraries/tsconfig
+
+RUN bun install
 
 WORKDIR /app/deployments/hedgeco-web
 RUN ls -la
