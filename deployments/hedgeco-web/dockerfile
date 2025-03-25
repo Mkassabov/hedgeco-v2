@@ -5,7 +5,7 @@ COPY ./package.json .
 COPY ./bun.lock .
 
 FROM base AS prod-deps
-RUN bun install --omit=dev --frozen-lockfile
+RUN bun install --omit=dev
 
 FROM base AS build-deps
 RUN bun install
