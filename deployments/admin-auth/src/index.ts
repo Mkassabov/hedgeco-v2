@@ -14,11 +14,11 @@ import { createConnection } from "mysql2/promise";
 import { Resource } from "sst";
 import { subjects } from "./subjects";
 const connection = await createConnection({
-	database: Resource["hedgeco-database"].database,
-	host: Resource["hedgeco-database"].host,
-	port: Resource["hedgeco-database"].port,
-	user: Resource["hedgeco-database"].username,
-	password: Resource["hedgeco-database"].password,
+	database: Resource.HedgecoDatabase.database,
+	host: Resource.HedgecoDatabase.host,
+	port: Resource.HedgecoDatabase.port,
+	user: Resource.HedgecoDatabase.username,
+	password: Resource.HedgecoDatabase.password,
 });
 
 const db = drizzle(connection, { schema, mode: "default" });
@@ -95,7 +95,7 @@ const app = issuer({
 					await sesClient.send(
 						new SendEmailCommand({
 							// biome-ignore lint/style/useNamingConvention: <explanation>
-							FromEmailAddress: Resource["no-reply-email-service"].sender,
+							FromEmailAddress: Resource.NoReplyEmailService.sender,
 							// biome-ignore lint/style/useNamingConvention: <explanation>
 							Destination: {
 								// biome-ignore lint/style/useNamingConvention: <explanation>

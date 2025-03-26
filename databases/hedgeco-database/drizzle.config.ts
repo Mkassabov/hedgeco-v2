@@ -6,10 +6,10 @@ export default defineConfig({
 	schema: "./src/db/schema.ts",
 	out: "./migrations",
 	dbCredentials: {
-		host: Resource["hedgeco-database"].host,
-		port: Resource["hedgeco-database"].port,
-		user: Resource["hedgeco-database"].username,
-		password: Resource["hedgeco-database"].password,
-		database: Resource["hedgeco-database"].database,
+		host: Resource.HedgecoDatabase.host,
+		port: Resource.HedgecoDatabase.port,
+		user: Resource.HedgecoDatabase.username,
+		password: Resource.HedgecoDatabase.password,
+		database: Resource.HedgecoDatabase.database,
 	},
 });

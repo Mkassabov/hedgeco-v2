@@ -20,4 +20,4 @@ ENV HOST=0.0.0.0
 ENV PORT=3000
 EXPOSE 3000
 
-CMD bun run dist/server/index.mjs
+CMD bun sst-adjust.ts && bun run dist/server/index.mjs

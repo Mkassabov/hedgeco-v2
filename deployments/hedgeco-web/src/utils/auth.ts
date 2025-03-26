@@ -6,7 +6,7 @@ import { Resource } from "sst";
 export const client = createClient({
 	// biome-ignore lint/style/useNamingConvention: defined by external package
 	clientID: "hedgeco-web",
-	issuer: Resource["admin-auth"].url,
+	issuer: Resource.AdminAuth.url,
 });
 
 export function setTokens(access: string, refresh: string) {
