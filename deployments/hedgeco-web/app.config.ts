@@ -1,6 +1,11 @@
 import { defineConfig } from "@tanstack/react-start/config";
 import tsConfigPaths from "vite-tsconfig-paths";
 
+console.log("===================");
+console.log(process.env);
+console.log(import.meta.env);
+console.log("===================");
+
 export default defineConfig({
 	tsr: {
 		appDirectory: "src",
