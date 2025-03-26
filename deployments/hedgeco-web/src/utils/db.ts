@@ -7,15 +7,15 @@ import { Resource } from "sst";
 
 const connection = await createConnection({
 	//@ts-expect-error
-	database: Resource["hedgeco-database"].database,
+	database: Resource.HedgecoDatabase.database,
 	//@ts-expect-error
-	host: Resource["hedgeco-database"].host,
+	host: Resource.HedgecoDatabase.host,
 	//@ts-expect-error
-	port: Resource["hedgeco-database"].port,
+	port: Resource.HedgecoDatabase.port,
 	//@ts-expect-error
-	user: Resource["hedgeco-database"].username,
+	user: Resource.HedgecoDatabase.username,
 	//@ts-expect-error
-	password: Resource["hedgeco-database"].password,
+	password: Resource.HedgecoDatabase.password,
 });
 
 export const db = drizzle(connection, { schema, mode: "default" });

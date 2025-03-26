@@ -6,7 +6,7 @@
 export default $config({
 	app(input) {
 		return {
-			name: "hedgeco-v2",
+			name: "hedgecoV2",
 			removal: input?.stage === "production" ? "retain" : "remove",
 			protect: ["production"].includes(input?.stage),
 			home: "aws",
@@ -26,25 +26,25 @@ export default $config({
 			: (process.env.CONTACT_EMAIL ?? "no-reply@hedgeco.net");
 
 		//* infra
-		const hedgecoVpc = new sst.aws.Vpc("hedgeco-vpc", {
+		const hedgecoVpc = new sst.aws.Vpc("HedgecoVpc", {
 			bastion: true,
 		});
-		const cluster = new sst.aws.Cluster("hedgeco-cluster", { vpc: hedgecoVpc });
+		const cluster = new sst.aws.Cluster("HedgecoCluster", { vpc: hedgecoVpc });
 		//todo this is ugly cause we did local before prod
-		const noReplyEmail = new sst.aws.Email("no-reply-email-service", {
+		const noReplyEmail = new sst.aws.Email("NoReplyEmailService", {
 			sender: isProduction
 				? "no-reply@hedgeco.net"
 				: `no-reply+${$app.stage}@hedgeco.net`,
 		});
 
 		//* databases
-		const hedgecoDatabase = new sst.aws.Aurora("hedgeco-database", {
+		const hedgecoDatabase = new sst.aws.Aurora("HedgecoDatabase", {
 			engine: "mysql",
 			vpc: hedgecoVpc,
 		});
 
 		//* services
-		const adminAuth = new sst.aws.Auth("admin-auth", {
+		const adminAuth = new sst.aws.Auth("AdminAuth", {
 			issuer: {
 				handler: "deployments/admin-auth/src/index.handler",
 				link: [noReplyEmail, hedgecoDatabase],
@@ -63,7 +63,7 @@ export default $config({
 				}),
 			},
 		});
-		const userAuth = new sst.aws.Auth("user-auth", {
+		const userAuth = new sst.aws.Auth("UserAuth", {
 			issuer: {
 				handler: "deployments/user-auth/src/index.handler",
 				link: [noReplyEmail, hedgecoDatabase],
@@ -83,7 +83,7 @@ export default $config({
 			},
 		});
 
-		new sst.aws.Service("hedgeco-web", {
+		new sst.aws.Service("HedgecoWeb", {
 			cluster,
 			link: [adminAuth, userAuth, hedgecoDatabase, noReplyEmail],
 			image: {

@@ -7,7 +7,7 @@ export function sendEmail(to: string, subject: string, body: string) {
 		new SendEmailCommand({
 			//@ts-expect-error
 			// biome-ignore lint/style/useNamingConvention: <explanation>
-			FromEmailAddress: Resource["no-reply-email-service"].sender,
+			FromEmailAddress: Resource.NoReplyEmailService.sender,
 			// biome-ignore lint/style/useNamingConvention: <explanation>
 			Destination: {
 				// biome-ignore lint/style/useNamingConvention: <explanation>
