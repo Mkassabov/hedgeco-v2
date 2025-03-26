@@ -5,11 +5,11 @@
 
 declare module "sst" {
   export interface Resource {
-    "adminAuth": {
+    "AdminAuth": {
       "type": "sst.aws.Auth"
       "url": string
     }
-    "hedgecoDatabase": {
+    "HedgecoDatabase": {
       "clusterArn": string
       "database": string
       "host": string
@@ -20,21 +20,21 @@ declare module "sst" {
       "type": "sst.aws.Aurora"
       "username": string
     }
-    "hedgecoVpc": {
+    "HedgecoVpc": {
       "bastion": string
       "type": "sst.aws.Vpc"
     }
-    "hedgecoWeb": {
+    "HedgecoWeb": {
       "service": string
       "type": "sst.aws.Service"
       "url": string
     }
-    "noReplyEmailService": {
+    "NoReplyEmailService": {
       "configSet": string
       "sender": string
       "type": "sst.aws.Email"
     }
-    "userAuth": {
+    "UserAuth": {
       "type": "sst.aws.Auth"
       "url": string
     }

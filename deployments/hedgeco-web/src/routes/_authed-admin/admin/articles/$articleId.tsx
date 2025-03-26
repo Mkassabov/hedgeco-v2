@@ -3,12 +3,12 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { type FormEvent, Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { NotFound } from "~/components/NotFound.js";
+import { NotFound } from "~/components/NotFound";
 import {
 	fetchArticleQueryOptions,
 	useDeleteArticle,
 	useUpdateArticle,
-} from "~/data/articles.js";
+} from "~/data/articles";
 
 export const Route = createFileRoute(
 	"/_authed-admin/admin/articles/$articleId",
