@@ -21,6 +21,9 @@ export default $config({
 			? "hedgeco.net"
 			: `${$app.stage}.hedgeco.net`;
 		const webDomain = `v2.${rootDomain}`;
+		const contactEmail = isProduction
+			? "contact@hedgeco.net"
+			: (process.env.CONTACT_EMAIL ?? "no-reply@hedgeco.net");
 
 		//* infra
 		const hedgecoVpc = new sst.aws.Vpc("hedgeco-vpc", {
@@ -31,7 +34,7 @@ export default $config({
 		const noReplyEmail = new sst.aws.Email("no-reply-email-service", {
 			sender: isProduction
 				? "no-reply@hedgeco.net"
-				: `no-reply+${$app.stage}@localhost`,
+				: `no-reply+${$app.stage}@hedgeco.net`,
 		});
 
 		//* databases
@@ -82,7 +85,7 @@ export default $config({
 
 		new sst.aws.Service("hedgeco-web", {
 			cluster,
-			link: [adminAuth, userAuth, hedgecoDatabase],
+			link: [adminAuth, userAuth, hedgecoDatabase, noReplyEmail],
 			image: {
 				dockerfile: "deployments/hedgeco-web/dockerfile",
 			},
@@ -102,6 +105,7 @@ export default $config({
 			environment: {
 				VITE_ADMIN_AUTH_URL: adminAuth.url,
 				VITE_USER_AUTH_URL: userAuth.url,
+				CONTACT_EMAIL: contactEmail,
 			},
 		});
 

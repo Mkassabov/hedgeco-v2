@@ -11,20 +11,31 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LogoutImport } from './routes/logout'
 import { Route as AdminLogoutImport } from './routes/admin-logout'
 import { Route as PublicImport } from './routes/_public'
 import { Route as AuthedAdminImport } from './routes/_authed-admin'
 import { Route as PublicIndexImport } from './routes/_public/index'
+import { Route as PublicContactUsImport } from './routes/_public/contact-us'
+import { Route as PublicAboutUsImport } from './routes/_public/about-us'
 import { Route as PublicNewsRouteImport } from './routes/_public/news/route'
 import { Route as PublicNewsIndexImport } from './routes/_public/news/index'
 import { Route as AuthedAdminAdminIndexImport } from './routes/_authed-admin/admin/index'
+import { Route as PublicRegisterNewsMemberImport } from './routes/_public/register/news-member'
 import { Route as PublicNewsArticleIdImport } from './routes/_public/news/$articleId'
 import { Route as AuthedAdminAdminArticlesRouteImport } from './routes/_authed-admin/admin/articles/route'
 import { Route as AuthedAdminAdminArticlesIndexImport } from './routes/_authed-admin/admin/articles/index'
+import { Route as PublicLegalDocLegalDocumentNameImport } from './routes/_public/legal/doc.$legalDocumentName'
 import { Route as AuthedAdminAdminArticlesNewImport } from './routes/_authed-admin/admin/articles/new'
 import { Route as AuthedAdminAdminArticlesArticleIdImport } from './routes/_authed-admin/admin/articles/$articleId'
 
 // Create/Update Routes
+
+const LogoutRoute = LogoutImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AdminLogoutRoute = AdminLogoutImport.update({
   id: '/admin-logout',
@@ -48,6 +59,18 @@ const PublicIndexRoute = PublicIndexImport.update({
   getParentRoute: () => PublicRoute,
 } as any)
 
+const PublicContactUsRoute = PublicContactUsImport.update({
+  id: '/contact-us',
+  path: '/contact-us',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicAboutUsRoute = PublicAboutUsImport.update({
+  id: '/about-us',
+  path: '/about-us',
+  getParentRoute: () => PublicRoute,
+} as any)
+
 const PublicNewsRouteRoute = PublicNewsRouteImport.update({
   id: '/news',
   path: '/news',
@@ -64,6 +87,12 @@ const AuthedAdminAdminIndexRoute = AuthedAdminAdminIndexImport.update({
   id: '/admin/',
   path: '/admin/',
   getParentRoute: () => AuthedAdminRoute,
+} as any)
+
+const PublicRegisterNewsMemberRoute = PublicRegisterNewsMemberImport.update({
+  id: '/register/news-member',
+  path: '/register/news-member',
+  getParentRoute: () => PublicRoute,
 } as any)
 
 const PublicNewsArticleIdRoute = PublicNewsArticleIdImport.update({
@@ -84,6 +113,13 @@ const AuthedAdminAdminArticlesIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthedAdminAdminArticlesRouteRoute,
+  } as any)
+
+const PublicLegalDocLegalDocumentNameRoute =
+  PublicLegalDocLegalDocumentNameImport.update({
+    id: '/legal/doc/$legalDocumentName',
+    path: '/legal/doc/$legalDocumentName',
+    getParentRoute: () => PublicRoute,
   } as any)
 
 const AuthedAdminAdminArticlesNewRoute =
@@ -125,11 +161,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLogoutImport
       parentRoute: typeof rootRoute
     }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutImport
+      parentRoute: typeof rootRoute
+    }
     '/_public/news': {
       id: '/_public/news'
       path: '/news'
       fullPath: '/news'
       preLoaderRoute: typeof PublicNewsRouteImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/about-us': {
+      id: '/_public/about-us'
+      path: '/about-us'
+      fullPath: '/about-us'
+      preLoaderRoute: typeof PublicAboutUsImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/contact-us': {
+      id: '/_public/contact-us'
+      path: '/contact-us'
+      fullPath: '/contact-us'
+      preLoaderRoute: typeof PublicContactUsImport
       parentRoute: typeof PublicImport
     }
     '/_public/': {
@@ -152,6 +209,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/news/$articleId'
       preLoaderRoute: typeof PublicNewsArticleIdImport
       parentRoute: typeof PublicNewsRouteImport
+    }
+    '/_public/register/news-member': {
+      id: '/_public/register/news-member'
+      path: '/register/news-member'
+      fullPath: '/register/news-member'
+      preLoaderRoute: typeof PublicRegisterNewsMemberImport
+      parentRoute: typeof PublicImport
     }
     '/_authed-admin/admin/': {
       id: '/_authed-admin/admin/'
@@ -180,6 +244,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/articles/new'
       preLoaderRoute: typeof AuthedAdminAdminArticlesNewImport
       parentRoute: typeof AuthedAdminAdminArticlesRouteImport
+    }
+    '/_public/legal/doc/$legalDocumentName': {
+      id: '/_public/legal/doc/$legalDocumentName'
+      path: '/legal/doc/$legalDocumentName'
+      fullPath: '/legal/doc/$legalDocumentName'
+      preLoaderRoute: typeof PublicLegalDocLegalDocumentNameImport
+      parentRoute: typeof PublicImport
     }
     '/_authed-admin/admin/articles/': {
       id: '/_authed-admin/admin/articles/'
@@ -243,12 +314,20 @@ const PublicNewsRouteRouteWithChildren = PublicNewsRouteRoute._addFileChildren(
 
 interface PublicRouteChildren {
   PublicNewsRouteRoute: typeof PublicNewsRouteRouteWithChildren
+  PublicAboutUsRoute: typeof PublicAboutUsRoute
+  PublicContactUsRoute: typeof PublicContactUsRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicRegisterNewsMemberRoute: typeof PublicRegisterNewsMemberRoute
+  PublicLegalDocLegalDocumentNameRoute: typeof PublicLegalDocLegalDocumentNameRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicNewsRouteRoute: PublicNewsRouteRouteWithChildren,
+  PublicAboutUsRoute: PublicAboutUsRoute,
+  PublicContactUsRoute: PublicContactUsRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicRegisterNewsMemberRoute: PublicRegisterNewsMemberRoute,
+  PublicLegalDocLegalDocumentNameRoute: PublicLegalDocLegalDocumentNameRoute,
 }
 
 const PublicRouteWithChildren =
@@ -257,26 +336,36 @@ const PublicRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof PublicRouteWithChildren
   '/admin-logout': typeof AdminLogoutRoute
+  '/logout': typeof LogoutRoute
   '/news': typeof PublicNewsRouteRouteWithChildren
+  '/about-us': typeof PublicAboutUsRoute
+  '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/register/news-member': typeof PublicRegisterNewsMemberRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
   '/news/': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof AuthedAdminRouteWithChildren
   '/admin-logout': typeof AdminLogoutRoute
+  '/logout': typeof LogoutRoute
+  '/about-us': typeof PublicAboutUsRoute
+  '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/register/news-member': typeof PublicRegisterNewsMemberRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
   '/news': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesIndexRoute
 }
 
@@ -285,14 +374,19 @@ export interface FileRoutesById {
   '/_authed-admin': typeof AuthedAdminRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
   '/admin-logout': typeof AdminLogoutRoute
+  '/logout': typeof LogoutRoute
   '/_public/news': typeof PublicNewsRouteRouteWithChildren
+  '/_public/about-us': typeof PublicAboutUsRoute
+  '/_public/contact-us': typeof PublicContactUsRoute
   '/_public/': typeof PublicIndexRoute
   '/_authed-admin/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/_public/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/_public/register/news-member': typeof PublicRegisterNewsMemberRoute
   '/_authed-admin/admin/': typeof AuthedAdminAdminIndexRoute
   '/_public/news/': typeof PublicNewsIndexRoute
   '/_authed-admin/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/_authed-admin/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/_public/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/_authed-admin/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
 }
 
@@ -301,39 +395,54 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/admin-logout'
+    | '/logout'
     | '/news'
+    | '/about-us'
+    | '/contact-us'
     | '/'
     | '/admin/articles'
     | '/news/$articleId'
+    | '/register/news-member'
     | '/admin'
     | '/news/'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/legal/doc/$legalDocumentName'
     | '/admin/articles/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
     | '/admin-logout'
+    | '/logout'
+    | '/about-us'
+    | '/contact-us'
     | '/'
     | '/news/$articleId'
+    | '/register/news-member'
     | '/admin'
     | '/news'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/legal/doc/$legalDocumentName'
     | '/admin/articles'
   id:
     | '__root__'
     | '/_authed-admin'
     | '/_public'
     | '/admin-logout'
+    | '/logout'
     | '/_public/news'
+    | '/_public/about-us'
+    | '/_public/contact-us'
     | '/_public/'
     | '/_authed-admin/admin/articles'
     | '/_public/news/$articleId'
+    | '/_public/register/news-member'
     | '/_authed-admin/admin/'
     | '/_public/news/'
     | '/_authed-admin/admin/articles/$articleId'
     | '/_authed-admin/admin/articles/new'
+    | '/_public/legal/doc/$legalDocumentName'
     | '/_authed-admin/admin/articles/'
   fileRoutesById: FileRoutesById
 }
@@ -342,12 +451,14 @@ export interface RootRouteChildren {
   AuthedAdminRoute: typeof AuthedAdminRouteWithChildren
   PublicRoute: typeof PublicRouteWithChildren
   AdminLogoutRoute: typeof AdminLogoutRoute
+  LogoutRoute: typeof LogoutRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthedAdminRoute: AuthedAdminRouteWithChildren,
   PublicRoute: PublicRouteWithChildren,
   AdminLogoutRoute: AdminLogoutRoute,
+  LogoutRoute: LogoutRoute,
 }
 
 export const routeTree = rootRoute
@@ -362,7 +473,8 @@ export const routeTree = rootRoute
       "children": [
         "/_authed-admin",
         "/_public",
-        "/admin-logout"
+        "/admin-logout",
+        "/logout"
       ]
     },
     "/_authed-admin": {
@@ -376,11 +488,18 @@ export const routeTree = rootRoute
       "filePath": "_public.tsx",
       "children": [
         "/_public/news",
-        "/_public/"
+        "/_public/about-us",
+        "/_public/contact-us",
+        "/_public/",
+        "/_public/register/news-member",
+        "/_public/legal/doc/$legalDocumentName"
       ]
     },
     "/admin-logout": {
       "filePath": "admin-logout.tsx"
+    },
+    "/logout": {
+      "filePath": "logout.tsx"
     },
     "/_public/news": {
       "filePath": "_public/news/route.tsx",
@@ -389,6 +508,14 @@ export const routeTree = rootRoute
         "/_public/news/$articleId",
         "/_public/news/"
       ]
+    },
+    "/_public/about-us": {
+      "filePath": "_public/about-us.tsx",
+      "parent": "/_public"
+    },
+    "/_public/contact-us": {
+      "filePath": "_public/contact-us.tsx",
+      "parent": "/_public"
     },
     "/_public/": {
       "filePath": "_public/index.tsx",
@@ -407,6 +534,10 @@ export const routeTree = rootRoute
       "filePath": "_public/news/$articleId.tsx",
       "parent": "/_public/news"
     },
+    "/_public/register/news-member": {
+      "filePath": "_public/register/news-member.tsx",
+      "parent": "/_public"
+    },
     "/_authed-admin/admin/": {
       "filePath": "_authed-admin/admin/index.tsx",
       "parent": "/_authed-admin"
@@ -422,6 +553,10 @@ export const routeTree = rootRoute
     "/_authed-admin/admin/articles/new": {
       "filePath": "_authed-admin/admin/articles/new.tsx",
       "parent": "/_authed-admin/admin/articles"
+    },
+    "/_public/legal/doc/$legalDocumentName": {
+      "filePath": "_public/legal/doc.$legalDocumentName.tsx",
+      "parent": "/_public"
     },
     "/_authed-admin/admin/articles/": {
       "filePath": "_authed-admin/admin/articles/index.tsx",

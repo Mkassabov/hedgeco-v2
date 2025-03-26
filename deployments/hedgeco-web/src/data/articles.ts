@@ -8,7 +8,7 @@ import {
 import { isNotFound, notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { desc, eq } from "drizzle-orm";
-import { adminAuthMiddleware } from "~/utils/auth";
+import { adminAuthMiddleware } from "~/data/middleware";
 import { db } from "~/utils/db";
 
 export const fetchArticleQueryOptions = (articleId: number) => {

@@ -1,10 +1,10 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_public/news")({
-	component: RouteComponent,
+	component: NewsComponent,
 });
 
-function RouteComponent() {
+function NewsComponent() {
 	return (
 		<>
 			<h1 className="text-cyan-900 text-2xl font-bold mt-5">

@@ -12,6 +12,11 @@ export default defineConfig({
 		output: {
 			dir: "dist",
 		},
+		esbuild: {
+			options: {
+				target: "es2022",
+			},
+		},
 	},
 	vite: {
 		plugins: [

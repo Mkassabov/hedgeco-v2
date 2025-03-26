@@ -7,7 +7,15 @@ import {
 	serial,
 	text,
 	timestamp,
+	varchar,
 } from "drizzle-orm/mysql-core";
+
+export const USER_TYPES = [
+	"newsOnly",
+	"serviceProvider",
+	"hedgeFundManager",
+	"investor",
+] as const;
 
 export const adminUsers = mysqlTable("admin_users", {
 	id: serial("id").primaryKey(),
@@ -18,12 +26,7 @@ export const adminUsers = mysqlTable("admin_users", {
 export const users = mysqlTable("users", {
 	id: serial("id").primaryKey(),
 	email: text("email").notNull(),
-	type: mysqlEnum("type", [
-		"newsOnly",
-		"serviceProvider",
-		"hedgeFundManager",
-		"investor",
-	]).notNull(),
+	type: mysqlEnum("type", USER_TYPES).notNull(),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -70,3 +73,17 @@ export const newsLettersToArticlesRelations = relations(
 		}),
 	}),
 );
+
+export const registrationRequests = mysqlTable("registration_requests", {
+	id: serial("id").primaryKey(),
+	email: text("email").notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	type: mysqlEnum("type", USER_TYPES).notNull(),
+});
+
+export const legalDocuments = mysqlTable("legal_documents", {
+	name: varchar("name", { length: 255 }).primaryKey(),
+	content: text("content").notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
