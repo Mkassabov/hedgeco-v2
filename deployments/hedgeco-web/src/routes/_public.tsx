@@ -1,6 +1,4 @@
 import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { loginFn } from "~/routes/_authed-admin";
 
 export const Route = createFileRoute("/_public")({
 	component: RouteComponent,
@@ -8,7 +6,8 @@ export const Route = createFileRoute("/_public")({
 
 function RouteComponent() {
 	const { user } = Route.useRouteContext();
-	const login = useServerFn(loginFn);
+	// const login = useServerFn(loginFn);
+	const login = () => {};
 
 	return (
 		<>

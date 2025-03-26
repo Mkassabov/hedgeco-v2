@@ -10,7 +10,7 @@ COPY ./deployments/user-auth ./deployments/user-auth
 COPY ./deployments/hedgeco-web ./deployments/hedgeco-web
 COPY ./libraries/tsconfig ./libraries/tsconfig
 
-RUN bun install
+RUN bun install --frozen-lockfile
 
 WORKDIR /app/deployments/hedgeco-web
 RUN ls -la
