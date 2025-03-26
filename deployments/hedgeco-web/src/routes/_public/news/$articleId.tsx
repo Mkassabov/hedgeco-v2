@@ -1,9 +1,39 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import * as schema from "@hedgeco/hedgeco-database";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, isNotFound, notFound } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { eq } from "drizzle-orm";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { NotFound } from "~/components/NotFound";
-import { fetchPublicArticleQueryOptions } from "~/data/articles";
+import { db } from "~/utils/db";
+
+const fetchPublicArticleQueryOptions = (articleId: number) => {
+	return queryOptions({
+		queryKey: ["article", articleId],
+		queryFn: () => fetchPublicArticle({ data: articleId }),
+		retry: (failureCount, error) => {
+			if (isNotFound(error)) {
+				return false;
+			}
+			return failureCount < 3;
+		},
+	});
+};
+
+const fetchPublicArticle = createServerFn({ method: "GET" })
+	.validator((articleId: number) => articleId)
+	.handler(async ({ data }) => {
+		const newsArticle = await db.query.newsArticles.findFirst({
+			where: eq(schema.newsArticles.id, data),
+		});
+
+		if (!newsArticle) {
+			throw notFound();
+		}
+
+		return newsArticle;
+	});
 
 export const Route = createFileRoute("/_public/news/$articleId")({
 	loader: ({ context, params: { articleId } }) => {

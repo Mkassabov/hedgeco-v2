@@ -1,14 +1,41 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import * as schema from "@hedgeco/hedgeco-database";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import {
 	Link,
 	Outlet,
 	createFileRoute,
 	useNavigate,
 } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
+import { desc } from "drizzle-orm";
 import { Suspense, useEffect } from "react";
 import { z } from "zod";
-import { ARTICLE_PAGE_SIZE, fetchArticlesQueryOptions } from "~/data/articles";
+import { adminAuthMiddleware } from "~/data/middleware";
+import { db } from "~/utils/db";
+
+const ARTICLE_PAGE_SIZE = 10;
+
+const fetchArticlesQueryOptions = (page: number) => {
+	const usablePage = page - 1;
+	return queryOptions({
+		queryKey: ["admin-articles", usablePage],
+		queryFn: () => fetchArticles({ data: { page: usablePage } }),
+	});
+};
+
+const fetchArticles = createServerFn({ method: "GET" })
+	.middleware([adminAuthMiddleware])
+	.validator((options: { page: number }) => options)
+	.handler(async ({ data }) => {
+		const newsArticles = await db.query.newsArticles.findMany({
+			offset: data.page * ARTICLE_PAGE_SIZE,
+			limit: ARTICLE_PAGE_SIZE,
+			orderBy: [desc(schema.newsArticles.id)],
+		});
+
+		return newsArticles;
+	});
 
 const searchSchema = z.object({
 	page: fallback(z.number().min(1), 1).default(1),
