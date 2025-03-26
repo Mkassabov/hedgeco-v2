@@ -28,6 +28,7 @@ export default $config({
 		//* infra
 		const hedgecoVpc = new sst.aws.Vpc("HedgecoVpc", {
 			bastion: true,
+			nat: "ec2",
 		});
 		const cluster = new sst.aws.Cluster("HedgecoCluster", { vpc: hedgecoVpc });
 		//todo this is ugly cause we did local before prod
