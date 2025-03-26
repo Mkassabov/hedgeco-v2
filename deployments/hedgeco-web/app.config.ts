@@ -12,6 +12,10 @@ export default defineConfig({
 		output: {
 			dir: "dist",
 		},
+		$env: {
+			...process.env,
+			...import.meta.env,
+		},
 		esbuild: {
 			options: {
 				target: "es2022",
