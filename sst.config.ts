@@ -55,6 +55,7 @@ export default $config({
 							: [webDomain, "localhost"],
 					}),
 				},
+				vpc: hedgecoVpc,
 			},
 			domain: {
 				name: `admin-auth.${rootDomain}`,
@@ -74,6 +75,7 @@ export default $config({
 							: [webDomain, "localhost"],
 					}),
 				},
+				vpc: hedgecoVpc,
 			},
 			domain: {
 				name: `user-auth.${rootDomain}`,
