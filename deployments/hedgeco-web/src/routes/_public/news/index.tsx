@@ -9,7 +9,7 @@ const fetchPublicArticlesQueryOptions = (page: number) => {
 	return queryOptions({
 		queryKey: ["articles", usablePage],
 		queryFn: () =>
-			fetch(`http://localhost:3000/api/articles?page=${usablePage}`, {
+			fetch(`https://v2.hedgeco.net/api/articles?page=${usablePage}`, {
 				method: "GET",
 			})
 				.then((res) => res.json())
