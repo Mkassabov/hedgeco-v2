@@ -14,8 +14,8 @@ import { type FormEvent, Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NotFound } from "~/components/NotFound";
-import { adminAuthMiddleware } from "~/data/middleware";
 import { db } from "~/utils/db";
+import { adminAuthMiddleware } from "~/utils/middleware";
 
 export const fetchArticleQueryOptions = (articleId: number) => {
 	return queryOptions({

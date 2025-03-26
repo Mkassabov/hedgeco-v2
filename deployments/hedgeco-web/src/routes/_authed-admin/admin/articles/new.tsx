@@ -9,9 +9,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { type FormEvent, Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { adminAuthMiddleware } from "~/data/middleware";
 import { fetchArticleQueryOptions } from "~/routes/_authed-admin/admin/articles/$articleId";
 import { db } from "~/utils/db";
+import { adminAuthMiddleware } from "~/utils/middleware";
 
 export const Route = createFileRoute("/_authed-admin/admin/articles/new")({
 	component: Deferred,

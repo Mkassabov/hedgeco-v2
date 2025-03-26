@@ -11,8 +11,8 @@ import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { desc } from "drizzle-orm";
 import { Suspense, useEffect } from "react";
 import { z } from "zod";
-import { adminAuthMiddleware } from "~/data/middleware";
 import { db } from "~/utils/db";
+import { adminAuthMiddleware } from "~/utils/middleware";
 
 const ARTICLE_PAGE_SIZE = 10;
 
