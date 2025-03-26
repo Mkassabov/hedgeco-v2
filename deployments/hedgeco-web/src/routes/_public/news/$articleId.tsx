@@ -2,7 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { NotFound } from "~/components/NotFound.js";
+import { NotFound } from "~/components/NotFound";
 import { fetchPublicArticleQueryOptions } from "~/data/articles";
 
 export const Route = createFileRoute("/_public/news/$articleId")({

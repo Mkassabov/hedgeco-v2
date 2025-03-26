@@ -40,7 +40,7 @@ function RouteComponent() {
 				</div>
 				<div className=" px-20 w-full h-28 bg-blue-950 flex items-center justify-between">
 					<img
-						src="/public/hedgeco-logo.png"
+						src="/hedgeco-logo.png"
 						alt="Hedgeco.net"
 						className="ml-24 h-3/4"
 					/>
