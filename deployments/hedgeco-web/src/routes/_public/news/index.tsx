@@ -1,9 +1,34 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import * as schema from "@hedgeco/hedgeco-database";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
+import { desc } from "drizzle-orm";
 import { Suspense } from "react";
 import { z } from "zod";
-import { fetchPublicArticlesQueryOptions } from "~/data/articles";
+import { db } from "~/utils/db";
+
+const PUBLIC_ARTICLE_PAGE_SIZE = 50;
+
+const fetchPublicArticlesQueryOptions = (page: number) => {
+	const usablePage = page - 1;
+	return queryOptions({
+		queryKey: ["articles", usablePage],
+		queryFn: () => fetchPublicArticles({ data: { page: usablePage } }),
+	});
+};
+
+const fetchPublicArticles = createServerFn({ method: "GET" })
+	.validator((options: { page: number }) => options)
+	.handler(async ({ data }) => {
+		const newsArticles = await db.query.newsArticles.findMany({
+			offset: data.page * PUBLIC_ARTICLE_PAGE_SIZE,
+			limit: PUBLIC_ARTICLE_PAGE_SIZE,
+			orderBy: [desc(schema.newsArticles.id)],
+		});
+
+		return newsArticles;
+	});
 
 const searchSchema = z.object({
 	page: fallback(z.number().min(1), 1).default(1),

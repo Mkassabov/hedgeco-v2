@@ -1,11 +1,61 @@
+import * as schema from "@hedgeco/hedgeco-database";
+import {
+	type MutationOptions,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { type FormEvent, Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
-import { useCreateArticle } from "~/data/articles";
+import { adminAuthMiddleware } from "~/data/middleware";
+import { fetchArticleQueryOptions } from "~/routes/_authed-admin/admin/articles/$articleId";
+import { db } from "~/utils/db";
+
 export const Route = createFileRoute("/_authed-admin/admin/articles/new")({
 	component: Deferred,
 });
+
+function useCreateArticle(
+	options?: Omit<
+		MutationOptions<
+			number,
+			Error,
+			{ articleTitle: string; articleContent: string }
+		>,
+		"mutationFn"
+	>,
+) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (article: {
+			articleTitle: string;
+			articleContent: string;
+		}) => createArticle({ data: article }),
+		...options,
+		onSuccess: async (data, variables, context) => {
+			queryClient.invalidateQueries({ queryKey: ["articles"] });
+			queryClient.prefetchQuery(fetchArticleQueryOptions(data));
+			if (options?.onSuccess) {
+				await options.onSuccess(data, variables, context);
+			}
+		},
+	});
+}
+
+const createArticle = createServerFn({ method: "POST" })
+	.middleware([adminAuthMiddleware])
+	.validator(
+		(article: { articleTitle: string; articleContent: string }) => article,
+	)
+	.handler(async ({ data }) => {
+		const response = await db.insert(schema.newsArticles).values({
+			articleTitle: data.articleTitle,
+			articleContent: data.articleContent,
+		});
+		return response[0].insertId;
+	});
 
 function Deferred() {
 	return (
