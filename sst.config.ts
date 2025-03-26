@@ -96,7 +96,7 @@ export default $config({
 						zone: hedgecoNetZoneId,
 					}),
 				},
-				ports: [{ listen: "80/http", forward: "3000/http" }],
+				ports: [{ listen: "443/https", forward: "3000/http" }],
 			},
 			dev: {
 				directory: "deployments/hedgeco-web",
