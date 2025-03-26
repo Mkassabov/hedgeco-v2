@@ -5,7 +5,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { sendEmail } from "~/utils/ses";
 
 export const Route = createFileRoute("/_public/contact-us")({
-	component: RouteComponent,
+	component: ContactUsComponent,
 });
 
 const sendContactMessage = createServerFn({ method: "POST" })
@@ -21,7 +21,7 @@ const sendContactMessage = createServerFn({ method: "POST" })
 		);
 	});
 
-function RouteComponent() {
+function ContactUsComponent() {
 	const contactMutation = useMutation({
 		mutationFn: (data: {
 			name: string;
@@ -30,6 +30,7 @@ function RouteComponent() {
 			message: string;
 		}) => sendContactMessage({ data }),
 	});
+	//todo show feedback the message has been sent
 
 	return (
 		<>

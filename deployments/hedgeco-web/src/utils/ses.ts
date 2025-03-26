@@ -3,13 +3,6 @@ import { Resource } from "sst";
 
 export const sesClient = new SESv2Client();
 export function sendEmail(to: string, subject: string, body: string) {
-	console.log(
-		"sending email",
-		to,
-		subject,
-		body,
-		Resource["no-reply-email-service"].sender,
-	);
 	return sesClient.send(
 		new SendEmailCommand({
 			//@ts-expect-error
