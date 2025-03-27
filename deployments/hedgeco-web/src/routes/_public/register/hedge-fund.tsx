@@ -6,7 +6,7 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { db } from "~/utils/db";
 import { sendEmail } from "~/utils/ses";
 
-export const Route = createFileRoute("/_public/register/investor copy")({
+export const Route = createFileRoute("/_public/register/hedge-fund")({
 	component: RegisterHedgeFundManagerComponent,
 });
 

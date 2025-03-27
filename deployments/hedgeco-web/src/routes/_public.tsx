@@ -1,4 +1,43 @@
-import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
+import { subjects } from "@hedgeco/user-auth";
+import {
+	Link,
+	Outlet,
+	createFileRoute,
+	redirect,
+} from "@tanstack/react-router";
+import { createServerFn, useServerFn } from "@tanstack/react-start";
+import { getCookie, getHeaders } from "@tanstack/react-start/server";
+import { setUserTokens, userClient } from "~/utils/auth";
+
+export const loginFn = createServerFn().handler(async () => {
+	const accessToken = getCookie("access_token");
+	const refreshToken = getCookie("refresh_token");
+
+	if (accessToken) {
+		const verified = await userClient.verify(
+			subjects,
+			accessToken,
+			refreshToken
+				? {
+						refresh: refreshToken,
+					}
+				: undefined,
+		);
+		if (!verified.err && verified.tokens) {
+			setUserTokens(verified.tokens.access, verified.tokens.refresh);
+			throw redirect({ to: "/" });
+		}
+	}
+
+	const headers = await getHeaders();
+	const host = headers?.host ?? headers.Host ?? "";
+	const protocol = host?.includes("localhost") ? "http" : "https";
+	const { url } = await userClient.authorize(
+		`${protocol}://${host}/api/auth-callback`,
+		"code",
+	);
+	throw redirect({ href: url });
+});
 
 export const Route = createFileRoute("/_public")({
 	component: RouteComponent,
@@ -6,8 +45,7 @@ export const Route = createFileRoute("/_public")({
 
 function RouteComponent() {
 	const { user } = Route.useRouteContext();
-	// const login = useServerFn(loginFn);
-	const login = () => {};
+	const login = useServerFn(loginFn);
 
 	return (
 		<>

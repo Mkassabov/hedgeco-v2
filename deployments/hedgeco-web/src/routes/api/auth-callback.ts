@@ -1,9 +1,9 @@
 import { createAPIFileRoute } from "@tanstack/react-start/api";
-import { adminAuth, adminClient, setAdminTokens } from "~/utils/auth";
+import { setUserTokens, userAuth, userClient } from "~/utils/auth";
 import { useAppSession } from "~/utils/session";
 import "sst";
 
-export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
+export const APIRoute = createAPIFileRoute("/api/auth-callback")({
 	GET: async ({ request }) => {
 		const url = new URL(request.url);
 		const code = url.searchParams.get("code");
@@ -24,9 +24,9 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 			);
 		}
 
-		const exchanged = await adminClient.exchange(
+		const exchanged = await userClient.exchange(
 			code,
-			`${url.origin}/api/admin/auth-callback`,
+			`${url.origin}/api/auth-callback`,
 		);
 		console.log("exchanged", exchanged);
 		if (exchanged.err) {
@@ -45,14 +45,14 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 		}
 		console.log("tokens", exchanged.tokens);
 
-		await setAdminTokens(exchanged.tokens.access, exchanged.tokens.refresh);
+		await setUserTokens(exchanged.tokens.access, exchanged.tokens.refresh);
 		console.log("setting tokens");
-		const adminSubject = await adminAuth({
+		const userSubject = await userAuth({
 			access: exchanged.tokens.access,
 			refresh: exchanged.tokens.refresh,
 		});
-		console.log("adminSubject", adminSubject);
-		if (!adminSubject) {
+		console.log("userSubject", userSubject);
+		if (!userSubject) {
 			console.log("failed to get subject");
 			return new Response(
 				JSON.stringify({
@@ -68,14 +68,14 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 		}
 		const session = await useAppSession();
 		console.log("session", session);
-		await session.update({ adminSubject });
-		console.log("redirecting to", `${url.origin}/admin`);
+		await session.update({ userSubject });
+		console.log("redirecting to", `${url.origin}/`);
 
 		const res = new Response(null, {
 			status: 302,
 			headers: {
 				// biome-ignore lint/style/useNamingConvention: <explanation>
-				Location: `${url.origin}/admin`,
+				Location: `${url.origin}/`,
 			},
 		});
 		console.log(res);

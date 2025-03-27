@@ -23,8 +23,8 @@ import { Route as PublicNewsIndexImport } from './routes/_public/news/index'
 import { Route as AuthedAdminAdminIndexImport } from './routes/_authed-admin/admin/index'
 import { Route as PublicRegisterServiceProviderImport } from './routes/_public/register/service-provider'
 import { Route as PublicRegisterNewsMemberImport } from './routes/_public/register/news-member'
-import { Route as PublicRegisterInvestorcopyImport } from './routes/_public/register/investor copy'
 import { Route as PublicRegisterInvestorImport } from './routes/_public/register/investor'
+import { Route as PublicRegisterHedgeFundImport } from './routes/_public/register/hedge-fund'
 import { Route as PublicNewsArticleIdImport } from './routes/_public/news/$articleId'
 import { Route as AuthedAdminAdminArticlesRouteImport } from './routes/_authed-admin/admin/articles/route'
 import { Route as AuthedAdminAdminArticlesIndexImport } from './routes/_authed-admin/admin/articles/index'
@@ -105,17 +105,15 @@ const PublicRegisterNewsMemberRoute = PublicRegisterNewsMemberImport.update({
   getParentRoute: () => PublicRoute,
 } as any)
 
-const PublicRegisterInvestorcopyRoute = PublicRegisterInvestorcopyImport.update(
-  {
-    id: '/register/investor copy',
-    path: '/register/investor copy',
-    getParentRoute: () => PublicRoute,
-  } as any,
-)
-
 const PublicRegisterInvestorRoute = PublicRegisterInvestorImport.update({
   id: '/register/investor',
   path: '/register/investor',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicRegisterHedgeFundRoute = PublicRegisterHedgeFundImport.update({
+  id: '/register/hedge-fund',
+  path: '/register/hedge-fund',
   getParentRoute: () => PublicRoute,
 } as any)
 
@@ -234,18 +232,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicNewsArticleIdImport
       parentRoute: typeof PublicNewsRouteImport
     }
+    '/_public/register/hedge-fund': {
+      id: '/_public/register/hedge-fund'
+      path: '/register/hedge-fund'
+      fullPath: '/register/hedge-fund'
+      preLoaderRoute: typeof PublicRegisterHedgeFundImport
+      parentRoute: typeof PublicImport
+    }
     '/_public/register/investor': {
       id: '/_public/register/investor'
       path: '/register/investor'
       fullPath: '/register/investor'
       preLoaderRoute: typeof PublicRegisterInvestorImport
-      parentRoute: typeof PublicImport
-    }
-    '/_public/register/investor copy': {
-      id: '/_public/register/investor copy'
-      path: '/register/investor copy'
-      fullPath: '/register/investor copy'
-      preLoaderRoute: typeof PublicRegisterInvestorcopyImport
       parentRoute: typeof PublicImport
     }
     '/_public/register/news-member': {
@@ -362,8 +360,8 @@ interface PublicRouteChildren {
   PublicAboutUsRoute: typeof PublicAboutUsRoute
   PublicContactUsRoute: typeof PublicContactUsRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicRegisterHedgeFundRoute: typeof PublicRegisterHedgeFundRoute
   PublicRegisterInvestorRoute: typeof PublicRegisterInvestorRoute
-  PublicRegisterInvestorcopyRoute: typeof PublicRegisterInvestorcopyRoute
   PublicRegisterNewsMemberRoute: typeof PublicRegisterNewsMemberRoute
   PublicRegisterServiceProviderRoute: typeof PublicRegisterServiceProviderRoute
   PublicLegalDocLegalDocumentNameRoute: typeof PublicLegalDocLegalDocumentNameRoute
@@ -374,8 +372,8 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutUsRoute: PublicAboutUsRoute,
   PublicContactUsRoute: PublicContactUsRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicRegisterHedgeFundRoute: PublicRegisterHedgeFundRoute,
   PublicRegisterInvestorRoute: PublicRegisterInvestorRoute,
-  PublicRegisterInvestorcopyRoute: PublicRegisterInvestorcopyRoute,
   PublicRegisterNewsMemberRoute: PublicRegisterNewsMemberRoute,
   PublicRegisterServiceProviderRoute: PublicRegisterServiceProviderRoute,
   PublicLegalDocLegalDocumentNameRoute: PublicLegalDocLegalDocumentNameRoute,
@@ -394,8 +392,8 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/register/hedge-fund': typeof PublicRegisterHedgeFundRoute
   '/register/investor': typeof PublicRegisterInvestorRoute
-  '/register/investor copy': typeof PublicRegisterInvestorcopyRoute
   '/register/news-member': typeof PublicRegisterNewsMemberRoute
   '/register/service-provider': typeof PublicRegisterServiceProviderRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
@@ -414,8 +412,8 @@ export interface FileRoutesByTo {
   '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/register/hedge-fund': typeof PublicRegisterHedgeFundRoute
   '/register/investor': typeof PublicRegisterInvestorRoute
-  '/register/investor copy': typeof PublicRegisterInvestorcopyRoute
   '/register/news-member': typeof PublicRegisterNewsMemberRoute
   '/register/service-provider': typeof PublicRegisterServiceProviderRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
@@ -438,8 +436,8 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_authed-admin/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/_public/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/_public/register/hedge-fund': typeof PublicRegisterHedgeFundRoute
   '/_public/register/investor': typeof PublicRegisterInvestorRoute
-  '/_public/register/investor copy': typeof PublicRegisterInvestorcopyRoute
   '/_public/register/news-member': typeof PublicRegisterNewsMemberRoute
   '/_public/register/service-provider': typeof PublicRegisterServiceProviderRoute
   '/_authed-admin/admin/': typeof AuthedAdminAdminIndexRoute
@@ -462,8 +460,8 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/articles'
     | '/news/$articleId'
+    | '/register/hedge-fund'
     | '/register/investor'
-    | '/register/investor copy'
     | '/register/news-member'
     | '/register/service-provider'
     | '/admin'
@@ -481,8 +479,8 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/'
     | '/news/$articleId'
+    | '/register/hedge-fund'
     | '/register/investor'
-    | '/register/investor copy'
     | '/register/news-member'
     | '/register/service-provider'
     | '/admin'
@@ -503,8 +501,8 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_authed-admin/admin/articles'
     | '/_public/news/$articleId'
+    | '/_public/register/hedge-fund'
     | '/_public/register/investor'
-    | '/_public/register/investor copy'
     | '/_public/register/news-member'
     | '/_public/register/service-provider'
     | '/_authed-admin/admin/'
@@ -560,8 +558,8 @@ export const routeTree = rootRoute
         "/_public/about-us",
         "/_public/contact-us",
         "/_public/",
+        "/_public/register/hedge-fund",
         "/_public/register/investor",
-        "/_public/register/investor copy",
         "/_public/register/news-member",
         "/_public/register/service-provider",
         "/_public/legal/doc/$legalDocumentName"
@@ -606,12 +604,12 @@ export const routeTree = rootRoute
       "filePath": "_public/news/$articleId.tsx",
       "parent": "/_public/news"
     },
-    "/_public/register/investor": {
-      "filePath": "_public/register/investor.tsx",
+    "/_public/register/hedge-fund": {
+      "filePath": "_public/register/hedge-fund.tsx",
       "parent": "/_public"
     },
-    "/_public/register/investor copy": {
-      "filePath": "_public/register/investor copy.tsx",
+    "/_public/register/investor": {
+      "filePath": "_public/register/investor.tsx",
       "parent": "/_public"
     },
     "/_public/register/news-member": {

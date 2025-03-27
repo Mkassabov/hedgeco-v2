@@ -7,14 +7,14 @@ import {
 } from "@tanstack/react-router";
 import { createServerFn, useServerFn } from "@tanstack/react-start";
 import { getCookie, getHeaders } from "@tanstack/react-start/server";
-import { client, setTokens } from "~/utils/auth";
+import { adminClient, setAdminTokens } from "~/utils/auth";
 
 export const loginFn = createServerFn().handler(async () => {
 	const accessToken = getCookie("admin_access_token");
 	const refreshToken = getCookie("admin_refresh_token");
 
 	if (accessToken) {
-		const verified = await client.verify(
+		const verified = await adminClient.verify(
 			subjects,
 			accessToken,
 			refreshToken
@@ -24,7 +24,7 @@ export const loginFn = createServerFn().handler(async () => {
 				: undefined,
 		);
 		if (!verified.err && verified.tokens) {
-			setTokens(verified.tokens.access, verified.tokens.refresh);
+			setAdminTokens(verified.tokens.access, verified.tokens.refresh);
 			throw redirect({ to: "/admin" });
 		}
 	}
@@ -32,7 +32,7 @@ export const loginFn = createServerFn().handler(async () => {
 	const headers = await getHeaders();
 	const host = headers?.host ?? headers.Host ?? "";
 	const protocol = host?.includes("localhost") ? "http" : "https";
-	const { url } = await client.authorize(
+	const { url } = await adminClient.authorize(
 		`${protocol}://${host}/api/admin/auth-callback`,
 		"code",
 	);
