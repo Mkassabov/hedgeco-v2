@@ -70,7 +70,7 @@ export function AdminSidebar<T extends { id: number }>(props: {
 					});
 				}
 			}
-			if (event.key === "c" && props.newPath != null) {
+			if (event.ctrlKey && event.key === "c" && props.newPath != null) {
 				return props.navigate({
 					to: props.newPath,
 					search: (prev) => ({ page: prev.page }),

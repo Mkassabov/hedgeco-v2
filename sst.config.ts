@@ -38,6 +38,12 @@ export default $config({
 				? "no-reply@hedgeco.net"
 				: `no-reply+${$app.stage}@hedgeco.net`,
 		});
+		//todo use sst secrets
+		const mailchimpApiKey = process.env.MAILCHIMP_API_KEY;
+		const mailchimpServer = process.env.MAILCHIMP_SERVER;
+		const mailchimpListId = process.env.MAILCHIMP_LIST_ID;
+		const mailchimpTemplateId = process.env.MAILCHIMP_TEMPLATE_ID;
+		const mailchimpTestingSegmentId = process.env.MAILCHIMP_TESTING_SEGMENT_ID;
 
 		//* databases
 		const hedgecoDatabase = new sst.aws.Aurora("HedgecoDatabase", {
@@ -110,6 +116,11 @@ export default $config({
 				VITE_ADMIN_AUTH_URL: adminAuth.url,
 				VITE_USER_AUTH_URL: userAuth.url,
 				CONTACT_EMAIL: contactEmail,
+				MAILCHIMP_API_KEY: mailchimpApiKey,
+				MAILCHIMP_SERVER: mailchimpServer,
+				MAILCHIMP_LIST_ID: mailchimpListId,
+				MAILCHIMP_TEMPLATE_ID: mailchimpTemplateId,
+				MAILCHIMP_TESTING_SEGMENT_ID: mailchimpTestingSegmentId,
 			},
 		});
 

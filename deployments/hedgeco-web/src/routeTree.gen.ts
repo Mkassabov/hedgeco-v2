@@ -28,15 +28,19 @@ import { Route as PublicRegisterHedgeFundImport } from './routes/_public/registe
 import { Route as PublicNewsArticleIdImport } from './routes/_public/news/$articleId'
 import { Route as AuthedAdminAdminUsersRouteImport } from './routes/_authed-admin/admin/users/route'
 import { Route as AuthedAdminAdminRegistrationRequestsRouteImport } from './routes/_authed-admin/admin/registration-requests/route'
+import { Route as AuthedAdminAdminNewslettersRouteImport } from './routes/_authed-admin/admin/newsletters/route'
 import { Route as AuthedAdminAdminArticlesRouteImport } from './routes/_authed-admin/admin/articles/route'
 import { Route as AuthedAdminAdminAdminsRouteImport } from './routes/_authed-admin/admin/admins/route'
 import { Route as AuthedAdminAdminUsersIndexImport } from './routes/_authed-admin/admin/users/index'
 import { Route as AuthedAdminAdminRegistrationRequestsIndexImport } from './routes/_authed-admin/admin/registration-requests/index'
+import { Route as AuthedAdminAdminNewslettersIndexImport } from './routes/_authed-admin/admin/newsletters/index'
 import { Route as AuthedAdminAdminArticlesIndexImport } from './routes/_authed-admin/admin/articles/index'
 import { Route as AuthedAdminAdminAdminsIndexImport } from './routes/_authed-admin/admin/admins/index'
 import { Route as PublicLegalDocLegalDocumentNameImport } from './routes/_public/legal/doc.$legalDocumentName'
 import { Route as AuthedAdminAdminUsersUserIdImport } from './routes/_authed-admin/admin/users/$userId'
 import { Route as AuthedAdminAdminRegistrationRequestsRegistrationRequestIdImport } from './routes/_authed-admin/admin/registration-requests/$registrationRequestId'
+import { Route as AuthedAdminAdminNewslettersNewImport } from './routes/_authed-admin/admin/newsletters/new'
+import { Route as AuthedAdminAdminNewslettersNewsletterIdImport } from './routes/_authed-admin/admin/newsletters/$newsletterId'
 import { Route as AuthedAdminAdminArticlesNewImport } from './routes/_authed-admin/admin/articles/new'
 import { Route as AuthedAdminAdminArticlesArticleIdImport } from './routes/_authed-admin/admin/articles/$articleId'
 import { Route as AuthedAdminAdminAdminsNewImport } from './routes/_authed-admin/admin/admins/new'
@@ -148,6 +152,13 @@ const AuthedAdminAdminRegistrationRequestsRouteRoute =
     getParentRoute: () => AuthedAdminRoute,
   } as any)
 
+const AuthedAdminAdminNewslettersRouteRoute =
+  AuthedAdminAdminNewslettersRouteImport.update({
+    id: '/admin/newsletters',
+    path: '/admin/newsletters',
+    getParentRoute: () => AuthedAdminRoute,
+  } as any)
+
 const AuthedAdminAdminArticlesRouteRoute =
   AuthedAdminAdminArticlesRouteImport.update({
     id: '/admin/articles',
@@ -175,6 +186,13 @@ const AuthedAdminAdminRegistrationRequestsIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthedAdminAdminRegistrationRequestsRouteRoute,
+  } as any)
+
+const AuthedAdminAdminNewslettersIndexRoute =
+  AuthedAdminAdminNewslettersIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthedAdminAdminNewslettersRouteRoute,
   } as any)
 
 const AuthedAdminAdminArticlesIndexRoute =
@@ -210,6 +228,20 @@ const AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute =
     id: '/$registrationRequestId',
     path: '/$registrationRequestId',
     getParentRoute: () => AuthedAdminAdminRegistrationRequestsRouteRoute,
+  } as any)
+
+const AuthedAdminAdminNewslettersNewRoute =
+  AuthedAdminAdminNewslettersNewImport.update({
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthedAdminAdminNewslettersRouteRoute,
+  } as any)
+
+const AuthedAdminAdminNewslettersNewsletterIdRoute =
+  AuthedAdminAdminNewslettersNewsletterIdImport.update({
+    id: '/$newsletterId',
+    path: '/$newsletterId',
+    getParentRoute: () => AuthedAdminAdminNewslettersRouteRoute,
   } as any)
 
 const AuthedAdminAdminArticlesNewRoute =
@@ -313,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminAdminArticlesRouteImport
       parentRoute: typeof AuthedAdminImport
     }
+    '/_authed-admin/admin/newsletters': {
+      id: '/_authed-admin/admin/newsletters'
+      path: '/admin/newsletters'
+      fullPath: '/admin/newsletters'
+      preLoaderRoute: typeof AuthedAdminAdminNewslettersRouteImport
+      parentRoute: typeof AuthedAdminImport
+    }
     '/_authed-admin/admin/registration-requests': {
       id: '/_authed-admin/admin/registration-requests'
       path: '/admin/registration-requests'
@@ -404,6 +443,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminAdminArticlesNewImport
       parentRoute: typeof AuthedAdminAdminArticlesRouteImport
     }
+    '/_authed-admin/admin/newsletters/$newsletterId': {
+      id: '/_authed-admin/admin/newsletters/$newsletterId'
+      path: '/$newsletterId'
+      fullPath: '/admin/newsletters/$newsletterId'
+      preLoaderRoute: typeof AuthedAdminAdminNewslettersNewsletterIdImport
+      parentRoute: typeof AuthedAdminAdminNewslettersRouteImport
+    }
+    '/_authed-admin/admin/newsletters/new': {
+      id: '/_authed-admin/admin/newsletters/new'
+      path: '/new'
+      fullPath: '/admin/newsletters/new'
+      preLoaderRoute: typeof AuthedAdminAdminNewslettersNewImport
+      parentRoute: typeof AuthedAdminAdminNewslettersRouteImport
+    }
     '/_authed-admin/admin/registration-requests/$registrationRequestId': {
       id: '/_authed-admin/admin/registration-requests/$registrationRequestId'
       path: '/$registrationRequestId'
@@ -438,6 +491,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/articles/'
       preLoaderRoute: typeof AuthedAdminAdminArticlesIndexImport
       parentRoute: typeof AuthedAdminAdminArticlesRouteImport
+    }
+    '/_authed-admin/admin/newsletters/': {
+      id: '/_authed-admin/admin/newsletters/'
+      path: '/'
+      fullPath: '/admin/newsletters/'
+      preLoaderRoute: typeof AuthedAdminAdminNewslettersIndexImport
+      parentRoute: typeof AuthedAdminAdminNewslettersRouteImport
     }
     '/_authed-admin/admin/registration-requests/': {
       id: '/_authed-admin/admin/registration-requests/'
@@ -495,6 +555,26 @@ const AuthedAdminAdminArticlesRouteRouteWithChildren =
     AuthedAdminAdminArticlesRouteRouteChildren,
   )
 
+interface AuthedAdminAdminNewslettersRouteRouteChildren {
+  AuthedAdminAdminNewslettersNewsletterIdRoute: typeof AuthedAdminAdminNewslettersNewsletterIdRoute
+  AuthedAdminAdminNewslettersNewRoute: typeof AuthedAdminAdminNewslettersNewRoute
+  AuthedAdminAdminNewslettersIndexRoute: typeof AuthedAdminAdminNewslettersIndexRoute
+}
+
+const AuthedAdminAdminNewslettersRouteRouteChildren: AuthedAdminAdminNewslettersRouteRouteChildren =
+  {
+    AuthedAdminAdminNewslettersNewsletterIdRoute:
+      AuthedAdminAdminNewslettersNewsletterIdRoute,
+    AuthedAdminAdminNewslettersNewRoute: AuthedAdminAdminNewslettersNewRoute,
+    AuthedAdminAdminNewslettersIndexRoute:
+      AuthedAdminAdminNewslettersIndexRoute,
+  }
+
+const AuthedAdminAdminNewslettersRouteRouteWithChildren =
+  AuthedAdminAdminNewslettersRouteRoute._addFileChildren(
+    AuthedAdminAdminNewslettersRouteRouteChildren,
+  )
+
 interface AuthedAdminAdminRegistrationRequestsRouteRouteChildren {
   AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute: typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
   AuthedAdminAdminRegistrationRequestsIndexRoute: typeof AuthedAdminAdminRegistrationRequestsIndexRoute
@@ -532,6 +612,7 @@ const AuthedAdminAdminUsersRouteRouteWithChildren =
 interface AuthedAdminRouteChildren {
   AuthedAdminAdminAdminsRouteRoute: typeof AuthedAdminAdminAdminsRouteRouteWithChildren
   AuthedAdminAdminArticlesRouteRoute: typeof AuthedAdminAdminArticlesRouteRouteWithChildren
+  AuthedAdminAdminNewslettersRouteRoute: typeof AuthedAdminAdminNewslettersRouteRouteWithChildren
   AuthedAdminAdminRegistrationRequestsRouteRoute: typeof AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren
   AuthedAdminAdminUsersRouteRoute: typeof AuthedAdminAdminUsersRouteRouteWithChildren
   AuthedAdminAdminIndexRoute: typeof AuthedAdminAdminIndexRoute
@@ -542,6 +623,8 @@ const AuthedAdminRouteChildren: AuthedAdminRouteChildren = {
     AuthedAdminAdminAdminsRouteRouteWithChildren,
   AuthedAdminAdminArticlesRouteRoute:
     AuthedAdminAdminArticlesRouteRouteWithChildren,
+  AuthedAdminAdminNewslettersRouteRoute:
+    AuthedAdminAdminNewslettersRouteRouteWithChildren,
   AuthedAdminAdminRegistrationRequestsRouteRoute:
     AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren,
   AuthedAdminAdminUsersRouteRoute: AuthedAdminAdminUsersRouteRouteWithChildren,
@@ -603,6 +686,7 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/admin/admins': typeof AuthedAdminAdminAdminsRouteRouteWithChildren
   '/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
+  '/admin/newsletters': typeof AuthedAdminAdminNewslettersRouteRouteWithChildren
   '/admin/registration-requests': typeof AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren
   '/admin/users': typeof AuthedAdminAdminUsersRouteRouteWithChildren
   '/news/$articleId': typeof PublicNewsArticleIdRoute
@@ -616,11 +700,14 @@ export interface FileRoutesByFullPath {
   '/admin/admins/new': typeof AuthedAdminAdminAdminsNewRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/admin/newsletters/$newsletterId': typeof AuthedAdminAdminNewslettersNewsletterIdRoute
+  '/admin/newsletters/new': typeof AuthedAdminAdminNewslettersNewRoute
   '/admin/registration-requests/$registrationRequestId': typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
   '/admin/users/$userId': typeof AuthedAdminAdminUsersUserIdRoute
   '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/admins/': typeof AuthedAdminAdminAdminsIndexRoute
   '/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
+  '/admin/newsletters/': typeof AuthedAdminAdminNewslettersIndexRoute
   '/admin/registration-requests/': typeof AuthedAdminAdminRegistrationRequestsIndexRoute
   '/admin/users/': typeof AuthedAdminAdminUsersIndexRoute
 }
@@ -643,11 +730,14 @@ export interface FileRoutesByTo {
   '/admin/admins/new': typeof AuthedAdminAdminAdminsNewRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/admin/newsletters/$newsletterId': typeof AuthedAdminAdminNewslettersNewsletterIdRoute
+  '/admin/newsletters/new': typeof AuthedAdminAdminNewslettersNewRoute
   '/admin/registration-requests/$registrationRequestId': typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
   '/admin/users/$userId': typeof AuthedAdminAdminUsersUserIdRoute
   '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/admins': typeof AuthedAdminAdminAdminsIndexRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesIndexRoute
+  '/admin/newsletters': typeof AuthedAdminAdminNewslettersIndexRoute
   '/admin/registration-requests': typeof AuthedAdminAdminRegistrationRequestsIndexRoute
   '/admin/users': typeof AuthedAdminAdminUsersIndexRoute
 }
@@ -664,6 +754,7 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_authed-admin/admin/admins': typeof AuthedAdminAdminAdminsRouteRouteWithChildren
   '/_authed-admin/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
+  '/_authed-admin/admin/newsletters': typeof AuthedAdminAdminNewslettersRouteRouteWithChildren
   '/_authed-admin/admin/registration-requests': typeof AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren
   '/_authed-admin/admin/users': typeof AuthedAdminAdminUsersRouteRouteWithChildren
   '/_public/news/$articleId': typeof PublicNewsArticleIdRoute
@@ -677,11 +768,14 @@ export interface FileRoutesById {
   '/_authed-admin/admin/admins/new': typeof AuthedAdminAdminAdminsNewRoute
   '/_authed-admin/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/_authed-admin/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/_authed-admin/admin/newsletters/$newsletterId': typeof AuthedAdminAdminNewslettersNewsletterIdRoute
+  '/_authed-admin/admin/newsletters/new': typeof AuthedAdminAdminNewslettersNewRoute
   '/_authed-admin/admin/registration-requests/$registrationRequestId': typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
   '/_authed-admin/admin/users/$userId': typeof AuthedAdminAdminUsersUserIdRoute
   '/_public/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/_authed-admin/admin/admins/': typeof AuthedAdminAdminAdminsIndexRoute
   '/_authed-admin/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
+  '/_authed-admin/admin/newsletters/': typeof AuthedAdminAdminNewslettersIndexRoute
   '/_authed-admin/admin/registration-requests/': typeof AuthedAdminAdminRegistrationRequestsIndexRoute
   '/_authed-admin/admin/users/': typeof AuthedAdminAdminUsersIndexRoute
 }
@@ -698,6 +792,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/admins'
     | '/admin/articles'
+    | '/admin/newsletters'
     | '/admin/registration-requests'
     | '/admin/users'
     | '/news/$articleId'
@@ -711,11 +806,14 @@ export interface FileRouteTypes {
     | '/admin/admins/new'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/admin/newsletters/$newsletterId'
+    | '/admin/newsletters/new'
     | '/admin/registration-requests/$registrationRequestId'
     | '/admin/users/$userId'
     | '/legal/doc/$legalDocumentName'
     | '/admin/admins/'
     | '/admin/articles/'
+    | '/admin/newsletters/'
     | '/admin/registration-requests/'
     | '/admin/users/'
   fileRoutesByTo: FileRoutesByTo
@@ -737,11 +835,14 @@ export interface FileRouteTypes {
     | '/admin/admins/new'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/admin/newsletters/$newsletterId'
+    | '/admin/newsletters/new'
     | '/admin/registration-requests/$registrationRequestId'
     | '/admin/users/$userId'
     | '/legal/doc/$legalDocumentName'
     | '/admin/admins'
     | '/admin/articles'
+    | '/admin/newsletters'
     | '/admin/registration-requests'
     | '/admin/users'
   id:
@@ -756,6 +857,7 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_authed-admin/admin/admins'
     | '/_authed-admin/admin/articles'
+    | '/_authed-admin/admin/newsletters'
     | '/_authed-admin/admin/registration-requests'
     | '/_authed-admin/admin/users'
     | '/_public/news/$articleId'
@@ -769,11 +871,14 @@ export interface FileRouteTypes {
     | '/_authed-admin/admin/admins/new'
     | '/_authed-admin/admin/articles/$articleId'
     | '/_authed-admin/admin/articles/new'
+    | '/_authed-admin/admin/newsletters/$newsletterId'
+    | '/_authed-admin/admin/newsletters/new'
     | '/_authed-admin/admin/registration-requests/$registrationRequestId'
     | '/_authed-admin/admin/users/$userId'
     | '/_public/legal/doc/$legalDocumentName'
     | '/_authed-admin/admin/admins/'
     | '/_authed-admin/admin/articles/'
+    | '/_authed-admin/admin/newsletters/'
     | '/_authed-admin/admin/registration-requests/'
     | '/_authed-admin/admin/users/'
   fileRoutesById: FileRoutesById
@@ -814,6 +919,7 @@ export const routeTree = rootRoute
       "children": [
         "/_authed-admin/admin/admins",
         "/_authed-admin/admin/articles",
+        "/_authed-admin/admin/newsletters",
         "/_authed-admin/admin/registration-requests",
         "/_authed-admin/admin/users",
         "/_authed-admin/admin/"
@@ -877,6 +983,15 @@ export const routeTree = rootRoute
         "/_authed-admin/admin/articles/"
       ]
     },
+    "/_authed-admin/admin/newsletters": {
+      "filePath": "_authed-admin/admin/newsletters/route.tsx",
+      "parent": "/_authed-admin",
+      "children": [
+        "/_authed-admin/admin/newsletters/$newsletterId",
+        "/_authed-admin/admin/newsletters/new",
+        "/_authed-admin/admin/newsletters/"
+      ]
+    },
     "/_authed-admin/admin/registration-requests": {
       "filePath": "_authed-admin/admin/registration-requests/route.tsx",
       "parent": "/_authed-admin",
@@ -937,6 +1052,14 @@ export const routeTree = rootRoute
       "filePath": "_authed-admin/admin/articles/new.tsx",
       "parent": "/_authed-admin/admin/articles"
     },
+    "/_authed-admin/admin/newsletters/$newsletterId": {
+      "filePath": "_authed-admin/admin/newsletters/$newsletterId.tsx",
+      "parent": "/_authed-admin/admin/newsletters"
+    },
+    "/_authed-admin/admin/newsletters/new": {
+      "filePath": "_authed-admin/admin/newsletters/new.tsx",
+      "parent": "/_authed-admin/admin/newsletters"
+    },
     "/_authed-admin/admin/registration-requests/$registrationRequestId": {
       "filePath": "_authed-admin/admin/registration-requests/$registrationRequestId.tsx",
       "parent": "/_authed-admin/admin/registration-requests"
@@ -956,6 +1079,10 @@ export const routeTree = rootRoute
     "/_authed-admin/admin/articles/": {
       "filePath": "_authed-admin/admin/articles/index.tsx",
       "parent": "/_authed-admin/admin/articles"
+    },
+    "/_authed-admin/admin/newsletters/": {
+      "filePath": "_authed-admin/admin/newsletters/index.tsx",
+      "parent": "/_authed-admin/admin/newsletters"
     },
     "/_authed-admin/admin/registration-requests/": {
       "filePath": "_authed-admin/admin/registration-requests/index.tsx",

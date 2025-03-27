@@ -78,16 +78,29 @@ export const Route = createFileRoute("/_authed-admin")({
 					>
 						Home
 					</Link>
-					<Link
-						to="/admin/articles"
-						activeProps={{
-							className: "border-solid border-b-white",
-						}}
-						className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
-					>
-						Articles
-					</Link>
-					<div className="m-2 relative group hover:block">
+					<div className="relative group hover:block">
+						<Link
+							to="/admin/articles"
+							activeProps={{
+								className: "border-solid border-b-white",
+							}}
+							className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent block"
+						>
+							Articles
+						</Link>
+						<div className="absolute left-0 w-48 border border-gray-300 rounded shadow-md hidden group-hover:block bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
+							<Link
+								activeProps={{
+									className: "border-solid border-b-white",
+								}}
+								to="/admin/newsletters"
+								className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+							>
+								Newsletters
+							</Link>
+						</div>
+					</div>
+					<div className="relative group hover:block">
 						<Link
 							to="/admin/users"
 							activeProps={{

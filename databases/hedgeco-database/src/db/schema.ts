@@ -33,6 +33,7 @@ export const users = mysqlTable("users", {
 export const newsLetters = mysqlTable("news_letters", {
 	id: serial("id").primaryKey(),
 	releaseDate: timestamp("release_date").notNull(),
+	mailchimpCampaignId: text("mailchimp_campaign_id").notNull(),
 });
 
 export const newsLetterRelations = relations(newsLetters, ({ many }) => ({
@@ -63,11 +64,11 @@ export const newsLettersToArticles = mysqlTable(
 export const newsLettersToArticlesRelations = relations(
 	newsLettersToArticles,
 	({ one }) => ({
-		group: one(newsLetters, {
+		newsLetter: one(newsLetters, {
 			fields: [newsLettersToArticles.newsLetterId],
 			references: [newsLetters.id],
 		}),
-		user: one(newsArticles, {
+		newsArticle: one(newsArticles, {
 			fields: [newsLettersToArticles.newsArticleId],
 			references: [newsArticles.id],
 		}),
