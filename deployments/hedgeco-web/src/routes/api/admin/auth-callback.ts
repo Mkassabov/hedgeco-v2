@@ -71,7 +71,13 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 		await session.update({ adminSubject });
 		console.log("redirecting to", `${url.origin}/admin`);
 
-		const res = Response.redirect(`${url.origin}/admin`);
+		const res = new Response(null, {
+			status: 302,
+			headers: {
+				// biome-ignore lint/style/useNamingConvention: <explanation>
+				Location: `${url.origin}/admin`,
+			},
+		});
 		console.log(res);
 		return res;
 	},
