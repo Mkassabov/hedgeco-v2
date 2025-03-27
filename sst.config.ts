@@ -21,9 +21,10 @@ export default $config({
 			? "hedgeco.net"
 			: `${$app.stage}.hedgeco.net`;
 		const webDomain = `v2.${rootDomain}`;
-		const contactEmail = isProduction
-			? "contact@hedgeco.net"
-			: (process.env.CONTACT_EMAIL ?? "no-reply@hedgeco.net");
+		// const contactEmail = isProduction
+		// 	? "contact@hedgeco.net"
+		// 	: (process.env.CONTACT_EMAIL ?? "no-reply@hedgeco.net");
+		const contactEmail = "michael@neutech.co";
 
 		//* infra
 		const hedgecoVpc = new sst.aws.Vpc("HedgecoVpc", {
