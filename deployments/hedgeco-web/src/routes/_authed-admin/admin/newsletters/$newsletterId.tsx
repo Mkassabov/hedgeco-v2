@@ -10,14 +10,36 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import { isNotFound, notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NotFound } from "~/components/NotFound";
-// import { fetchArticlesQueryOptions } from "~/routes/_authed-admin/admin/articles/route";
 import { db } from "~/utils/db";
 import { adminAuthMiddleware } from "~/utils/middleware";
+
+//todo this should be dedupped
+const ARTICLE_PAGE_SIZE = 10;
+
+const fetchArticlesQueryOptions = (page: number) => {
+	const usablePage = page - 1;
+	return queryOptions({
+		queryKey: ["admin-articles", usablePage],
+		queryFn: () => fetchArticles({ data: { page: usablePage } }),
+	});
+};
+const fetchArticles = createServerFn({ method: "GET" })
+	.middleware([adminAuthMiddleware])
+	.validator((options: { page: number }) => options)
+	.handler(async ({ data }) => {
+		const newsArticles = await db.query.newsArticles.findMany({
+			offset: data.page * ARTICLE_PAGE_SIZE,
+			limit: ARTICLE_PAGE_SIZE,
+			orderBy: [desc(schema.newsArticles.id)],
+		});
+
+		return newsArticles;
+	});
 
 async function updateNewsletterContent(newsletterId: number) {
 	"use server";
@@ -288,7 +310,7 @@ function NewsletterComponent() {
 	const newsletterQuery = useSuspenseQuery(
 		fetchNewsletterQueryOptions(Number(newsletterId)),
 	);
-	// const articlesQuery = useSuspenseQuery(fetchArticlesQueryOptions(1));
+	const articlesQuery = useSuspenseQuery(fetchArticlesQueryOptions(1));
 	const [isTestEmailDialogOpen, setIsTestEmailDialogOpen] = useState(false);
 	const sendTestNewsletter = useSendTestNewsletter();
 	const sendNewsletterNow = useSendNewsletterNow();
@@ -479,7 +501,7 @@ function NewsletterComponent() {
 						<span className="p-2 text-center border-b border-gray-700">
 							Add Articles
 						</span>
-						{/* <Suspense fallback={<div>Loading...</div>}>
+						<Suspense fallback={<div>Loading...</div>}>
 							{articlesQuery.data
 								.filter(
 									(article) =>
@@ -532,7 +554,7 @@ function NewsletterComponent() {
 										</li>
 									);
 								})}
-						</Suspense> */}
+						</Suspense>
 					</ul>
 				</div>
 			</Suspense>
