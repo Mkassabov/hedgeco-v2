@@ -24,6 +24,15 @@ const fetchAdminUser = createServerFn({ method: "GET" }).handler(async () => {
 	return session.data.adminSubject;
 });
 
+const fetchUser = createServerFn({ method: "GET" }).handler(async () => {
+	// We need to auth on the server so we have access to secure cookies
+	const session = await useAppSession();
+	if (!session.data.userSubject) {
+		return null;
+	}
+	return session.data.userSubject;
+});
+
 export const Route = createRootRouteWithContext<{
 	queryClient: QueryClient;
 }>()({
@@ -44,15 +53,16 @@ export const Route = createRootRouteWithContext<{
 		],
 		links: [
 			{ rel: "stylesheet", href: appCss },
-			{ rel: "icon", href: "/favicon.ico" },
+			{ rel: "icon", href: "/favicon.png" },
 		],
 	}),
 	beforeLoad: async () => {
 		const adminUser = await fetchAdminUser();
+		const user = await fetchUser();
 
 		return {
 			adminUser,
-			user: null,
+			user,
 		};
 	},
 	errorComponent: (props) => {
