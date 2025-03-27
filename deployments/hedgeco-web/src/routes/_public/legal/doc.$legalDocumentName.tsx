@@ -4,13 +4,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
 import { db } from "~/utils/db";
 
-// const getLegalDocument = async (legalDocumentName: string) => {
-// 	const legalDocument = await db.query.legalDocuments.findFirst({
-// 		where: eq(legalDocuments.name, legalDocumentName),
-// 	});
-// 	return legalDocument;
-// };
-
 const getLegalDocument = createServerFn({ method: "GET" })
 	.validator((legalDocumentName: string) => legalDocumentName)
 	.handler(async ({ data }) => {

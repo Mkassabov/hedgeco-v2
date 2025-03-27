@@ -33,7 +33,7 @@ export const loginFn = createServerFn().handler(async () => {
 	const host = headers?.host ?? headers.Host ?? "";
 	const protocol = host?.includes("localhost") ? "http" : "https";
 	const { url } = await client.authorize(
-		`${protocol}://${host}/api/admin-auth-callback`,
+		`${protocol}://${host}/api/admin/auth-callback`,
 		"code",
 	);
 	throw redirect({ href: url });
