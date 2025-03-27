@@ -1,6 +1,7 @@
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { adminAuth, client, setTokens } from "~/utils/auth";
 import { useAppSession } from "~/utils/session";
+import "sst";
 
 export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 	GET: async ({ request }) => {
