@@ -12,7 +12,7 @@ import { adminAuthMiddleware } from "~/utils/middleware";
 
 const ARTICLE_PAGE_SIZE = 10;
 
-export const fetchArticlesQueryOptions = (page: number) => {
+const fetchArticlesQueryOptions = (page: number) => {
 	const usablePage = page - 1;
 	return queryOptions({
 		queryKey: ["admin-articles", usablePage],

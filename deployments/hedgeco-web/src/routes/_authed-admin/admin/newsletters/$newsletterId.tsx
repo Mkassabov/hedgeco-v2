@@ -15,7 +15,7 @@ import { Suspense, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { NotFound } from "~/components/NotFound";
-import { fetchArticlesQueryOptions } from "~/routes/_authed-admin/admin/articles/route";
+// import { fetchArticlesQueryOptions } from "~/routes/_authed-admin/admin/articles/route";
 import { db } from "~/utils/db";
 import { adminAuthMiddleware } from "~/utils/middleware";
 
@@ -288,7 +288,7 @@ function NewsletterComponent() {
 	const newsletterQuery = useSuspenseQuery(
 		fetchNewsletterQueryOptions(Number(newsletterId)),
 	);
-	const articlesQuery = useSuspenseQuery(fetchArticlesQueryOptions(1));
+	// const articlesQuery = useSuspenseQuery(fetchArticlesQueryOptions(1));
 	const [isTestEmailDialogOpen, setIsTestEmailDialogOpen] = useState(false);
 	const sendTestNewsletter = useSendTestNewsletter();
 	const sendNewsletterNow = useSendNewsletterNow();
@@ -479,7 +479,7 @@ function NewsletterComponent() {
 						<span className="p-2 text-center border-b border-gray-700">
 							Add Articles
 						</span>
-						<Suspense fallback={<div>Loading...</div>}>
+						{/* <Suspense fallback={<div>Loading...</div>}>
 							{articlesQuery.data
 								.filter(
 									(article) =>
@@ -532,7 +532,7 @@ function NewsletterComponent() {
 										</li>
 									);
 								})}
-						</Suspense>
+						</Suspense> */}
 					</ul>
 				</div>
 			</Suspense>
