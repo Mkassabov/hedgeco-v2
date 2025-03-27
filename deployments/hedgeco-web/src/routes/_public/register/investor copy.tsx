@@ -6,26 +6,26 @@ import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { db } from "~/utils/db";
 import { sendEmail } from "~/utils/ses";
 
-export const Route = createFileRoute("/_public/register/news-member")({
-	component: RegisterNewsMemberComponent,
+export const Route = createFileRoute("/_public/register/investor copy")({
+	component: RegisterHedgeFundManagerComponent,
 });
 
 const sendContactMessage = createServerFn({ method: "POST" })
 	.validator((data: { email: string }) => data)
 	.handler(async ({ data }) => {
 		//todo we don't verify the email and we probably should
-		await db.insert(schema.users).values({
+		await db.insert(schema.registrationRequests).values({
 			email: data.email,
-			type: "newsOnly",
+			type: "hedgeFundManager",
 		});
 		return await sendEmail(
 			process.env.CONTACT_EMAIL!,
-			"News User Registered",
+			"Hedge Fund Manager Registration Request",
 			`Email: ${data.email}`,
 		);
 	});
 
-function RegisterNewsMemberComponent() {
+function RegisterHedgeFundManagerComponent() {
 	const contactMutation = useMutation({
 		mutationFn: (data: {
 			email: string;
@@ -52,7 +52,7 @@ function RegisterNewsMemberComponent() {
 				className="mt-2 rounded-lg border-2 border-cyan-900 p-4 max-w-[40rem] flex flex-col gap-4"
 			>
 				<h2 className="text-cyan-900 text-lg font-bold">
-					Enter your email to register as a News Member
+					Enter your email to register as a Hedge Fund Manager
 				</h2>
 				<div className="flex flex-wrap gap-2">
 					<div className="flex flex-col gap-1 w-[15rem]">

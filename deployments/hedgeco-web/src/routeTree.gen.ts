@@ -21,7 +21,10 @@ import { Route as PublicAboutUsImport } from './routes/_public/about-us'
 import { Route as PublicNewsRouteImport } from './routes/_public/news/route'
 import { Route as PublicNewsIndexImport } from './routes/_public/news/index'
 import { Route as AuthedAdminAdminIndexImport } from './routes/_authed-admin/admin/index'
+import { Route as PublicRegisterServiceProviderImport } from './routes/_public/register/service-provider'
 import { Route as PublicRegisterNewsMemberImport } from './routes/_public/register/news-member'
+import { Route as PublicRegisterInvestorcopyImport } from './routes/_public/register/investor copy'
+import { Route as PublicRegisterInvestorImport } from './routes/_public/register/investor'
 import { Route as PublicNewsArticleIdImport } from './routes/_public/news/$articleId'
 import { Route as AuthedAdminAdminArticlesRouteImport } from './routes/_authed-admin/admin/articles/route'
 import { Route as AuthedAdminAdminArticlesIndexImport } from './routes/_authed-admin/admin/articles/index'
@@ -89,9 +92,30 @@ const AuthedAdminAdminIndexRoute = AuthedAdminAdminIndexImport.update({
   getParentRoute: () => AuthedAdminRoute,
 } as any)
 
+const PublicRegisterServiceProviderRoute =
+  PublicRegisterServiceProviderImport.update({
+    id: '/register/service-provider',
+    path: '/register/service-provider',
+    getParentRoute: () => PublicRoute,
+  } as any)
+
 const PublicRegisterNewsMemberRoute = PublicRegisterNewsMemberImport.update({
   id: '/register/news-member',
   path: '/register/news-member',
+  getParentRoute: () => PublicRoute,
+} as any)
+
+const PublicRegisterInvestorcopyRoute = PublicRegisterInvestorcopyImport.update(
+  {
+    id: '/register/investor copy',
+    path: '/register/investor copy',
+    getParentRoute: () => PublicRoute,
+  } as any,
+)
+
+const PublicRegisterInvestorRoute = PublicRegisterInvestorImport.update({
+  id: '/register/investor',
+  path: '/register/investor',
   getParentRoute: () => PublicRoute,
 } as any)
 
@@ -210,11 +234,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicNewsArticleIdImport
       parentRoute: typeof PublicNewsRouteImport
     }
+    '/_public/register/investor': {
+      id: '/_public/register/investor'
+      path: '/register/investor'
+      fullPath: '/register/investor'
+      preLoaderRoute: typeof PublicRegisterInvestorImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/register/investor copy': {
+      id: '/_public/register/investor copy'
+      path: '/register/investor copy'
+      fullPath: '/register/investor copy'
+      preLoaderRoute: typeof PublicRegisterInvestorcopyImport
+      parentRoute: typeof PublicImport
+    }
     '/_public/register/news-member': {
       id: '/_public/register/news-member'
       path: '/register/news-member'
       fullPath: '/register/news-member'
       preLoaderRoute: typeof PublicRegisterNewsMemberImport
+      parentRoute: typeof PublicImport
+    }
+    '/_public/register/service-provider': {
+      id: '/_public/register/service-provider'
+      path: '/register/service-provider'
+      fullPath: '/register/service-provider'
+      preLoaderRoute: typeof PublicRegisterServiceProviderImport
       parentRoute: typeof PublicImport
     }
     '/_authed-admin/admin/': {
@@ -317,7 +362,10 @@ interface PublicRouteChildren {
   PublicAboutUsRoute: typeof PublicAboutUsRoute
   PublicContactUsRoute: typeof PublicContactUsRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicRegisterInvestorRoute: typeof PublicRegisterInvestorRoute
+  PublicRegisterInvestorcopyRoute: typeof PublicRegisterInvestorcopyRoute
   PublicRegisterNewsMemberRoute: typeof PublicRegisterNewsMemberRoute
+  PublicRegisterServiceProviderRoute: typeof PublicRegisterServiceProviderRoute
   PublicLegalDocLegalDocumentNameRoute: typeof PublicLegalDocLegalDocumentNameRoute
 }
 
@@ -326,7 +374,10 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutUsRoute: PublicAboutUsRoute,
   PublicContactUsRoute: PublicContactUsRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicRegisterInvestorRoute: PublicRegisterInvestorRoute,
+  PublicRegisterInvestorcopyRoute: PublicRegisterInvestorcopyRoute,
   PublicRegisterNewsMemberRoute: PublicRegisterNewsMemberRoute,
+  PublicRegisterServiceProviderRoute: PublicRegisterServiceProviderRoute,
   PublicLegalDocLegalDocumentNameRoute: PublicLegalDocLegalDocumentNameRoute,
 }
 
@@ -343,7 +394,10 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/register/investor': typeof PublicRegisterInvestorRoute
+  '/register/investor copy': typeof PublicRegisterInvestorcopyRoute
   '/register/news-member': typeof PublicRegisterNewsMemberRoute
+  '/register/service-provider': typeof PublicRegisterServiceProviderRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
   '/news/': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
@@ -360,7 +414,10 @@ export interface FileRoutesByTo {
   '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/register/investor': typeof PublicRegisterInvestorRoute
+  '/register/investor copy': typeof PublicRegisterInvestorcopyRoute
   '/register/news-member': typeof PublicRegisterNewsMemberRoute
+  '/register/service-provider': typeof PublicRegisterServiceProviderRoute
   '/admin': typeof AuthedAdminAdminIndexRoute
   '/news': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
@@ -381,7 +438,10 @@ export interface FileRoutesById {
   '/_public/': typeof PublicIndexRoute
   '/_authed-admin/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
   '/_public/news/$articleId': typeof PublicNewsArticleIdRoute
+  '/_public/register/investor': typeof PublicRegisterInvestorRoute
+  '/_public/register/investor copy': typeof PublicRegisterInvestorcopyRoute
   '/_public/register/news-member': typeof PublicRegisterNewsMemberRoute
+  '/_public/register/service-provider': typeof PublicRegisterServiceProviderRoute
   '/_authed-admin/admin/': typeof AuthedAdminAdminIndexRoute
   '/_public/news/': typeof PublicNewsIndexRoute
   '/_authed-admin/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
@@ -402,7 +462,10 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/articles'
     | '/news/$articleId'
+    | '/register/investor'
+    | '/register/investor copy'
     | '/register/news-member'
+    | '/register/service-provider'
     | '/admin'
     | '/news/'
     | '/admin/articles/$articleId'
@@ -418,7 +481,10 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/'
     | '/news/$articleId'
+    | '/register/investor'
+    | '/register/investor copy'
     | '/register/news-member'
+    | '/register/service-provider'
     | '/admin'
     | '/news'
     | '/admin/articles/$articleId'
@@ -437,7 +503,10 @@ export interface FileRouteTypes {
     | '/_public/'
     | '/_authed-admin/admin/articles'
     | '/_public/news/$articleId'
+    | '/_public/register/investor'
+    | '/_public/register/investor copy'
     | '/_public/register/news-member'
+    | '/_public/register/service-provider'
     | '/_authed-admin/admin/'
     | '/_public/news/'
     | '/_authed-admin/admin/articles/$articleId'
@@ -491,7 +560,10 @@ export const routeTree = rootRoute
         "/_public/about-us",
         "/_public/contact-us",
         "/_public/",
+        "/_public/register/investor",
+        "/_public/register/investor copy",
         "/_public/register/news-member",
+        "/_public/register/service-provider",
         "/_public/legal/doc/$legalDocumentName"
       ]
     },
@@ -534,8 +606,20 @@ export const routeTree = rootRoute
       "filePath": "_public/news/$articleId.tsx",
       "parent": "/_public/news"
     },
+    "/_public/register/investor": {
+      "filePath": "_public/register/investor.tsx",
+      "parent": "/_public"
+    },
+    "/_public/register/investor copy": {
+      "filePath": "_public/register/investor copy.tsx",
+      "parent": "/_public"
+    },
     "/_public/register/news-member": {
       "filePath": "_public/register/news-member.tsx",
+      "parent": "/_public"
+    },
+    "/_public/register/service-provider": {
+      "filePath": "_public/register/service-provider.tsx",
       "parent": "/_public"
     },
     "/_authed-admin/admin/": {

@@ -6,8 +6,10 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 	GET: async ({ request }) => {
 		const url = new URL(request.url);
 		const code = url.searchParams.get("code");
+		console.log("code", code);
 
 		if (!code) {
+			console.log("no code provided");
 			return new Response(
 				JSON.stringify({
 					message: "No code provided",
@@ -25,8 +27,9 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 			code,
 			`${url.origin}/api/admin/auth-callback`,
 		);
-
+		console.log("exchanged", exchanged);
 		if (exchanged.err) {
+			console.log("failed to exchange code", exchanged.err);
 			return new Response(
 				JSON.stringify({
 					message: "Failed to exchange code",
@@ -39,13 +42,17 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 				},
 			);
 		}
+		console.log("tokens", exchanged.tokens);
 
 		await setTokens(exchanged.tokens.access, exchanged.tokens.refresh);
+		console.log("setting tokens");
 		const adminSubject = await adminAuth({
 			access: exchanged.tokens.access,
 			refresh: exchanged.tokens.refresh,
 		});
+		console.log("adminSubject", adminSubject);
 		if (!adminSubject) {
+			console.log("failed to get subject");
 			return new Response(
 				JSON.stringify({
 					message: "Failed to get subject",
@@ -59,8 +66,12 @@ export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 			);
 		}
 		const session = await useAppSession();
+		console.log("session", session);
 		await session.update({ adminSubject });
+		console.log("redirecting to", `${url.origin}/admin`);
 
-		return Response.redirect(`${url.origin}/admin`);
+		const res = Response.redirect(`${url.origin}/admin`);
+		console.log(res);
+		return res;
 	},
 });
