@@ -2,7 +2,7 @@ import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { adminAuth, client, setTokens } from "~/utils/auth";
 import { useAppSession } from "~/utils/session";
 
-export const APIRoute = createAPIFileRoute("/api/admin-auth-callback")({
+export const APIRoute = createAPIFileRoute("/api/admin/auth-callback")({
 	GET: async ({ request }) => {
 		const url = new URL(request.url);
 		const code = url.searchParams.get("code");
@@ -23,7 +23,7 @@ export const APIRoute = createAPIFileRoute("/api/admin-auth-callback")({
 
 		const exchanged = await client.exchange(
 			code,
-			`${url.origin}/api/admin-auth-callback`,
+			`${url.origin}/api/admin/auth-callback`,
 		);
 
 		if (exchanged.err) {
