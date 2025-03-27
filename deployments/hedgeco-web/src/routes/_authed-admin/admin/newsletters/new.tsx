@@ -52,9 +52,15 @@ const createNewsletter = createServerFn({ method: "POST" })
 			await mailchimp.campaigns.create({
 				type: "regular",
 				recipients: {
-					segment_opts: {
-						saved_segment_id: Number(process.env.MAILCHIMP_TESTING_SEGMENT_ID),
-					},
+					...(process.env.MAILCHIMP_TESTING_SEGMENT_ID
+						? {
+								segment_opts: {
+									saved_segment_id: Number(
+										process.env.MAILCHIMP_TESTING_SEGMENT_ID,
+									),
+								},
+							}
+						: {}),
 					list_id: process.env.MAILCHIMP_LIST_ID,
 				},
 				settings: {
