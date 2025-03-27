@@ -68,69 +68,73 @@ export const Route = createFileRoute("/_authed-admin")({
 						Go To Consumer
 					</Link>
 					<div className="w-[1px] bg-gray-700 h-full" />
-					<Link
-						to="/admin"
-						activeProps={{
-							className: "border-solid border-b-white",
-						}}
-						className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
-						activeOptions={{ exact: true }}
-					>
-						Home
-					</Link>
-					<div className="relative group hover:block">
-						<Link
-							to="/admin/articles"
-							activeProps={{
-								className: "border-solid border-b-white",
-							}}
-							className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent block"
-						>
-							Articles
-						</Link>
-						<div className="absolute left-0 w-48 border border-gray-300 rounded shadow-md hidden group-hover:block bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
+					{adminUser != null && (
+						<>
 							<Link
+								to="/admin"
 								activeProps={{
 									className: "border-solid border-b-white",
 								}}
-								to="/admin/newsletters"
-								className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+								className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+								activeOptions={{ exact: true }}
 							>
-								Newsletters
+								Home
 							</Link>
-						</div>
-					</div>
-					<div className="relative group hover:block">
-						<Link
-							to="/admin/users"
-							activeProps={{
-								className: "border-solid border-b-white",
-							}}
-							className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent block"
-						>
-							Users
-						</Link>
-						<div className="absolute left-0 w-48 border border-gray-300 rounded shadow-md hidden group-hover:block bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
-							<Link
-								activeProps={{
-									className: "border-solid border-b-white",
-								}}
-								to="/admin/registration-requests"
-								className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
-							>
-								Registration Requests
-							</Link>
-							<Link
-								activeProps={{
-									className: "border-solid border-b-white",
-								}}
-								to="/admin/admins"
-								className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
-							>
-								Admins
-							</Link>
-						</div>
-					</div>
+							<div className="relative group hover:block">
+								<Link
+									to="/admin/articles"
+									activeProps={{
+										className: "border-solid border-b-white",
+									}}
+									className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent block"
+								>
+									Articles
+								</Link>
+								<div className="absolute left-0 w-48 border border-gray-300 rounded shadow-md hidden group-hover:block bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
+									<Link
+										activeProps={{
+											className: "border-solid border-b-white",
+										}}
+										to="/admin/newsletters"
+										className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+									>
+										Newsletters
+									</Link>
+								</div>
+							</div>
+							<div className="relative group hover:block">
+								<Link
+									to="/admin/users"
+									activeProps={{
+										className: "border-solid border-b-white",
+									}}
+									className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent block"
+								>
+									Users
+								</Link>
+								<div className="absolute left-0 w-48 border border-gray-300 rounded shadow-md hidden group-hover:block bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
+									<Link
+										activeProps={{
+											className: "border-solid border-b-white",
+										}}
+										to="/admin/registration-requests"
+										className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+									>
+										Registration Requests
+									</Link>
+									<Link
+										activeProps={{
+											className: "border-solid border-b-white",
+										}}
+										to="/admin/admins"
+										className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+									>
+										Admins
+									</Link>
+								</div>
+							</div>
+						</>
+					)}
 					<div className="ml-auto mr-2">
 						{adminUser ? (
 							<>
