@@ -13,12 +13,16 @@ const sendContactMessage = createServerFn({ method: "POST" })
 		(data: { name: string; email: string; phone?: string; message: string }) =>
 			data,
 	)
-	.handler(({ data }) => {
-		return sendEmail(
+	.handler(async ({ data }) => {
+		await sendEmail(
 			process.env.CONTACT_EMAIL!,
 			"HedgeCo Contact Form Message",
 			`Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nMessage: ${data.message}`,
 		);
+		return {
+			success: true,
+			message: "Message sent successfully. An admin will contact you shortly.",
+		};
 	});
 
 function ContactUsComponent() {
@@ -36,6 +40,11 @@ function ContactUsComponent() {
 		<>
 			<h1 className="text-cyan-900 text-2xl font-bold mt-5">Contact Us</h1>
 			<hr />
+			{contactMutation.data?.success && (
+				<div className="flex flex-col gap-2 my-2 border-green-400 border-2 rounded-lg p-2 max-w-[40rem] bg-green-900 text-white">
+					<span>{contactMutation.data.message}</span>
+				</div>
+			)}
 			<form
 				noValidate={false}
 				onSubmit={(e) => {

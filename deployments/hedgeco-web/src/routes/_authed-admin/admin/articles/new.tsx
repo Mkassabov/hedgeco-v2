@@ -35,7 +35,7 @@ function useCreateArticle(
 		}) => createArticle({ data: article }),
 		...options,
 		onSuccess: async (data, variables, context) => {
-			queryClient.invalidateQueries({ queryKey: ["articles"] });
+			queryClient.invalidateQueries({ queryKey: ["admin-articles"] });
 			queryClient.prefetchQuery(fetchArticleQueryOptions(data));
 			if (options?.onSuccess) {
 				await options.onSuccess(data, variables, context);

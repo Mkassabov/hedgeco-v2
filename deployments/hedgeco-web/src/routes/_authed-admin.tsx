@@ -107,7 +107,15 @@ export const Route = createFileRoute("/_authed-admin")({
 							>
 								Registration Requests
 							</Link>
-							{/* Add more links here if needed */}
+							<Link
+								activeProps={{
+									className: "border-solid border-b-white",
+								}}
+								to="/admin/admins"
+								className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+							>
+								Admins
+							</Link>
 						</div>
 					</div>
 					<div className="ml-auto mr-2">
