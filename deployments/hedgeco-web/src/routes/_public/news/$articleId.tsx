@@ -86,7 +86,7 @@ function NewsArticleComponent() {
 					{articleQuery.data.articleTitle}
 				</h1>
 				<span className="text-[11px] text-gray-400">
-					{articleQuery.data.createdAt.toLocaleDateString("en-US", {
+					{new Date(articleQuery.data.createdAt).toLocaleDateString("en-US", {
 						year: "numeric",
 						month: "long",
 						day: "numeric",

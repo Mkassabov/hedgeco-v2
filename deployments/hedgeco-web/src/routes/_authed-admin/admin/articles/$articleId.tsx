@@ -214,12 +214,12 @@ function ReadView({ setIsEditView }: { setIsEditView: () => void }) {
 			</div>
 			<div className="flex flex-col">
 				<span className="text-sm text-gray-500">
-					created at: {articleQuery.data.createdAt.toLocaleString()}
+					created at: {new Date(articleQuery.data.createdAt).toLocaleString()}
 				</span>
 				{articleQuery.data.updatedAt.getTime() !==
 					articleQuery.data.createdAt.getTime() && (
 					<span className="text-sm text-gray-500">
-						updated at: {articleQuery.data.updatedAt.toLocaleString()}
+						updated at: {new Date(articleQuery.data.updatedAt).toLocaleString()}
 					</span>
 				)}
 			</div>
@@ -279,12 +279,12 @@ function Edit({ setIsReadView }: { setIsReadView: () => void }) {
 			</div>
 			<div className="flex flex-col">
 				<span className="text-sm text-gray-500">
-					created at: {articleQuery.data.createdAt.toLocaleString()}
+					created at: {new Date(articleQuery.data.createdAt).toLocaleString()}
 				</span>
 				{articleQuery.data.updatedAt.getTime() !==
 					articleQuery.data.createdAt.getTime() && (
 					<span className="text-sm text-gray-500">
-						updated at: {articleQuery.data.updatedAt.toLocaleString()}
+						updated at: {new Date(articleQuery.data.updatedAt).toLocaleString()}
 					</span>
 				)}
 			</div>

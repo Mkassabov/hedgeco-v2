@@ -55,7 +55,7 @@ function NewsComponent() {
 						</h2>
 					</Link>
 					<span className="text-[11px] text-gray-400">
-						{article.createdAt.toLocaleDateString("en-US", {
+						{new Date(article.createdAt).toLocaleDateString("en-US", {
 							year: "numeric",
 							month: "long",
 							day: "numeric",
