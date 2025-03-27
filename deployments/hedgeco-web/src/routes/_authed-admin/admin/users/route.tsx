@@ -14,37 +14,37 @@ import { z } from "zod";
 import { db } from "~/utils/db";
 import { adminAuthMiddleware } from "~/utils/middleware";
 
-const ARTICLE_PAGE_SIZE = 10;
+const USER_PAGE_SIZE = 10;
 
-const fetchArticlesQueryOptions = (page: number) => {
+const fetchUsersQueryOptions = (page: number) => {
 	const usablePage = page - 1;
 	return queryOptions({
-		queryKey: ["admin-articles", usablePage],
-		queryFn: () => fetchArticles({ data: { page: usablePage } }),
+		queryKey: ["admin-users", usablePage],
+		queryFn: () => fetchUsers({ data: { page: usablePage } }),
 	});
 };
 
-const fetchArticles = createServerFn({ method: "GET" })
+const fetchUsers = createServerFn({ method: "GET" })
 	.middleware([adminAuthMiddleware])
 	.validator((options: { page: number }) => options)
 	.handler(async ({ data }) => {
-		const newsArticles = await db.query.newsArticles.findMany({
-			offset: data.page * ARTICLE_PAGE_SIZE,
-			limit: ARTICLE_PAGE_SIZE,
-			orderBy: [desc(schema.newsArticles.id)],
+		const users = await db.query.users.findMany({
+			offset: data.page * USER_PAGE_SIZE,
+			limit: USER_PAGE_SIZE,
+			orderBy: [desc(schema.users.id)],
 		});
 
-		return newsArticles;
+		return users;
 	});
 
 const searchSchema = z.object({
 	page: fallback(z.number().min(1), 1).default(1),
 });
 
-export const Route = createFileRoute("/_authed-admin/admin/articles")({
+export const Route = createFileRoute("/_authed-admin/admin/users")({
 	loaderDeps: ({ search: { page } }) => ({ page }),
 	loader: ({ context, deps: { page } }) => {
-		context.queryClient.prefetchQuery(fetchArticlesQueryOptions(page));
+		context.queryClient.prefetchQuery(fetchUsersQueryOptions(page));
 	},
 	validateSearch: zodValidator(searchSchema),
 	component: Deferred,
@@ -53,30 +53,28 @@ export const Route = createFileRoute("/_authed-admin/admin/articles")({
 function Deferred() {
 	return (
 		<Suspense fallback="Loading...">
-			<ArticlesComponent />
+			<UsersComponent />
 		</Suspense>
 	);
 }
 
-function ArticlesComponent() {
+function UsersComponent() {
 	const { page } = Route.useSearch();
-	const navigate = useNavigate({ from: "/admin/articles" });
-	const articlesQuery = useSuspenseQuery(fetchArticlesQueryOptions(page));
-	const params = Route.useParams() as { articleId?: string };
-	const currentArticleIndex =
-		params?.articleId == null
+	const navigate = useNavigate({ from: "/admin/users" });
+	const usersQuery = useSuspenseQuery(fetchUsersQueryOptions(page));
+	const params = Route.useParams() as { userId?: string };
+	const currentUserIndex =
+		params?.userId == null
 			? null
-			: articlesQuery.data.findIndex(
-					(article) => article.id === Number(params.articleId),
-				);
+			: usersQuery.data.findIndex((user) => user.id === Number(params.userId));
 
 	useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === "ArrowDown" || event.key === "ArrowUp") {
 				event.preventDefault();
 				const dir = event.key === "ArrowDown" ? 1 : -1;
-				const isFirst = currentArticleIndex === 0;
-				const isLast = currentArticleIndex === articlesQuery.data.length - 1;
+				const isFirst = currentUserIndex === 0;
+				const isLast = currentUserIndex === usersQuery.data.length - 1;
 				if (isFirst && dir === -1) {
 					if (page === 1) {
 						return;
@@ -88,44 +86,38 @@ function ArticlesComponent() {
 				if (
 					isLast &&
 					dir === 1 &&
-					articlesQuery.data.length % ARTICLE_PAGE_SIZE === 0
+					usersQuery.data.length % USER_PAGE_SIZE === 0
 				) {
 					return navigate({
 						search: (prev) => ({ page: prev.page + 1 }),
 					});
 				}
-				if (currentArticleIndex == null) {
-					const nextArticle =
+				if (currentUserIndex == null) {
+					const nextUser =
 						dir === 1
-							? articlesQuery.data[0]
-							: articlesQuery.data[articlesQuery.data.length - 1];
-					if (nextArticle == null) {
+							? usersQuery.data[0]
+							: usersQuery.data[usersQuery.data.length - 1];
+					if (nextUser == null) {
 						return navigate({
 							search: (prev) => ({ page: prev.page - 1 }),
 						});
 					}
 					return navigate({
-						to: "/admin/articles/$articleId",
-						params: { articleId: nextArticle.id.toString() },
+						to: "/admin/users/$userId",
+						params: { userId: nextUser.id.toString() },
 						search: (prev) => ({ page: prev.page }),
 					});
 				}
 
-				const nextArticleId =
-					articlesQuery.data[currentArticleIndex + dir]?.id.toString();
-				if (nextArticleId != null) {
+				const nextUserId =
+					usersQuery.data[currentUserIndex + dir]?.id.toString();
+				if (nextUserId != null) {
 					return navigate({
-						to: "/admin/articles/$articleId",
-						params: { articleId: nextArticleId },
+						to: "/admin/users/$userId",
+						params: { userId: nextUserId },
 						search: (prev) => ({ page: prev.page }),
 					});
 				}
-			}
-			if (event.key === "c") {
-				return navigate({
-					to: "/admin/articles/new",
-					search: (prev) => ({ page: prev.page }),
-				});
 			}
 		};
 
@@ -134,31 +126,25 @@ function ArticlesComponent() {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [currentArticleIndex, navigate, articlesQuery.data, page]);
+	}, [currentUserIndex, navigate, usersQuery.data, page]);
 
 	return (
 		<div className="flex h-full">
 			<ul className="list-disc min-w-48 h-full flex flex-col">
-				<Link
-					to="/admin/articles/new"
-					className="border-b border-gray-700 h-14 flex items-center justify-center group"
-				>
-					<div className="text-lg group-hover:text-blue-800">New Article</div>
-				</Link>
 				<Suspense fallback={<div>Loading...</div>}>
-					{articlesQuery.data.length === 0 && (
+					{usersQuery.data.length === 0 && (
 						<div className="flex flex-grow justify-center">
-							<p className="text-gray-500">No articles</p>
+							<p className="text-gray-500">No users</p>
 						</div>
 					)}
-					{articlesQuery.data.map((article) => {
+					{usersQuery.data.map((user) => {
 						return (
-							<li key={article.id} className="border-b border-gray-700 flex">
+							<li key={user.id} className="border-b border-gray-700 flex">
 								<Link
 									preload={false}
-									to="/admin/articles/$articleId"
+									to="/admin/users/$userId"
 									params={{
-										articleId: article.id.toString(),
+										userId: user.id.toString(),
 									}}
 									search={{ page }}
 									className="group block py-1 px-2 w-full border-l-4"
@@ -171,13 +157,9 @@ function ArticlesComponent() {
 								>
 									<div>
 										<p className="text-lg text-blue-800 group-hover:text-blue-600">
-											{article.articleTitle.substring(0, 20)}
-										</p>
-										<p className="text-sm text-gray-500">
-											{article.createdAt.toLocaleDateString()}
-											{article.updatedAt.getTime() !==
-												article.createdAt.getTime() &&
-												` - ${article.updatedAt.toLocaleDateString()}`}
+											{`${user.email.substring(0, 16)}${
+												user.email.length > 16 ? "..." : ""
+											}`}
 										</p>
 									</div>
 								</Link>
@@ -189,10 +171,10 @@ function ArticlesComponent() {
 				<div className="flex justify-center items-center border-t border-gray-700">
 					<Link
 						disabled={page === 1}
-						to="/admin/articles"
+						to="/admin/users"
 						search={{ page: page - 1 }}
 						params={{
-							articleId: params?.articleId,
+							userId: params?.userId,
 						}}
 						className="py-1 text-center flex-grow aria-disabled:cursor-not-allowed aria-disabled:text-gray-500"
 					>
@@ -200,15 +182,11 @@ function ArticlesComponent() {
 					</Link>
 					<div className="w-[1px] bg-gray-700 h-full" />
 					<Link
-						disabled={articlesQuery.data.length % ARTICLE_PAGE_SIZE !== 0}
-						to={
-							params?.articleId
-								? "/admin/articles/$articleId"
-								: "/admin/articles"
-						}
+						disabled={usersQuery.data.length % USER_PAGE_SIZE !== 0}
+						to={params?.userId ? "/admin/users/$userId" : "/admin/users"}
 						search={{ page: page + 1 }}
 						params={{
-							articleId: params?.articleId,
+							userId: params?.userId,
 						}}
 						className="py-1 text-center flex-grow aria-disabled:cursor-not-allowed aria-disabled:text-gray-500"
 					>

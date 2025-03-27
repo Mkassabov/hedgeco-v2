@@ -14,37 +14,41 @@ import { z } from "zod";
 import { db } from "~/utils/db";
 import { adminAuthMiddleware } from "~/utils/middleware";
 
-const ARTICLE_PAGE_SIZE = 10;
+const REGISTRATION_REQUEST_PAGE_SIZE = 10;
 
-const fetchArticlesQueryOptions = (page: number) => {
+const fetchRegistrationRequestsQueryOptions = (page: number) => {
 	const usablePage = page - 1;
 	return queryOptions({
-		queryKey: ["admin-articles", usablePage],
-		queryFn: () => fetchArticles({ data: { page: usablePage } }),
+		queryKey: ["admin-registration-requests", usablePage],
+		queryFn: () => fetchRegistrationRequests({ data: { page: usablePage } }),
 	});
 };
 
-const fetchArticles = createServerFn({ method: "GET" })
+const fetchRegistrationRequests = createServerFn({ method: "GET" })
 	.middleware([adminAuthMiddleware])
 	.validator((options: { page: number }) => options)
 	.handler(async ({ data }) => {
-		const newsArticles = await db.query.newsArticles.findMany({
-			offset: data.page * ARTICLE_PAGE_SIZE,
-			limit: ARTICLE_PAGE_SIZE,
-			orderBy: [desc(schema.newsArticles.id)],
+		const registrationRequests = await db.query.registrationRequests.findMany({
+			offset: data.page * REGISTRATION_REQUEST_PAGE_SIZE,
+			limit: REGISTRATION_REQUEST_PAGE_SIZE,
+			orderBy: [desc(schema.registrationRequests.id)],
 		});
 
-		return newsArticles;
+		return registrationRequests;
 	});
 
 const searchSchema = z.object({
 	page: fallback(z.number().min(1), 1).default(1),
 });
 
-export const Route = createFileRoute("/_authed-admin/admin/articles")({
+export const Route = createFileRoute(
+	"/_authed-admin/admin/registration-requests",
+)({
 	loaderDeps: ({ search: { page } }) => ({ page }),
 	loader: ({ context, deps: { page } }) => {
-		context.queryClient.prefetchQuery(fetchArticlesQueryOptions(page));
+		context.queryClient.prefetchQuery(
+			fetchRegistrationRequestsQueryOptions(page),
+		);
 	},
 	validateSearch: zodValidator(searchSchema),
 	component: Deferred,
@@ -53,21 +57,24 @@ export const Route = createFileRoute("/_authed-admin/admin/articles")({
 function Deferred() {
 	return (
 		<Suspense fallback="Loading...">
-			<ArticlesComponent />
+			<RegistrationRequests />
 		</Suspense>
 	);
 }
 
-function ArticlesComponent() {
+function RegistrationRequests() {
 	const { page } = Route.useSearch();
-	const navigate = useNavigate({ from: "/admin/articles" });
-	const articlesQuery = useSuspenseQuery(fetchArticlesQueryOptions(page));
-	const params = Route.useParams() as { articleId?: string };
-	const currentArticleIndex =
-		params?.articleId == null
+	const navigate = useNavigate({ from: "/admin/registration-requests" });
+	const registrationRequestsQuery = useSuspenseQuery(
+		fetchRegistrationRequestsQueryOptions(page),
+	);
+	const params = Route.useParams() as { registrationRequestId?: string };
+	const currentRegistrationRequestIndex =
+		params?.registrationRequestId == null
 			? null
-			: articlesQuery.data.findIndex(
-					(article) => article.id === Number(params.articleId),
+			: registrationRequestsQuery.data.findIndex(
+					(registrationRequest) =>
+						registrationRequest.id === Number(params.registrationRequestId),
 				);
 
 	useEffect(() => {
@@ -75,8 +82,10 @@ function ArticlesComponent() {
 			if (event.key === "ArrowDown" || event.key === "ArrowUp") {
 				event.preventDefault();
 				const dir = event.key === "ArrowDown" ? 1 : -1;
-				const isFirst = currentArticleIndex === 0;
-				const isLast = currentArticleIndex === articlesQuery.data.length - 1;
+				const isFirst = currentRegistrationRequestIndex === 0;
+				const isLast =
+					currentRegistrationRequestIndex ===
+					registrationRequestsQuery.data.length - 1;
 				if (isFirst && dir === -1) {
 					if (page === 1) {
 						return;
@@ -88,44 +97,46 @@ function ArticlesComponent() {
 				if (
 					isLast &&
 					dir === 1 &&
-					articlesQuery.data.length % ARTICLE_PAGE_SIZE === 0
+					registrationRequestsQuery.data.length %
+						REGISTRATION_REQUEST_PAGE_SIZE ===
+						0
 				) {
 					return navigate({
 						search: (prev) => ({ page: prev.page + 1 }),
 					});
 				}
-				if (currentArticleIndex == null) {
-					const nextArticle =
+				if (currentRegistrationRequestIndex == null) {
+					const nextRegistrationRequest =
 						dir === 1
-							? articlesQuery.data[0]
-							: articlesQuery.data[articlesQuery.data.length - 1];
-					if (nextArticle == null) {
+							? registrationRequestsQuery.data[0]
+							: registrationRequestsQuery.data[
+									registrationRequestsQuery.data.length - 1
+								];
+					if (nextRegistrationRequest == null) {
 						return navigate({
 							search: (prev) => ({ page: prev.page - 1 }),
 						});
 					}
 					return navigate({
-						to: "/admin/articles/$articleId",
-						params: { articleId: nextArticle.id.toString() },
+						to: "/admin/registration-requests/$registrationRequestId",
+						params: {
+							registrationRequestId: nextRegistrationRequest.id.toString(),
+						},
 						search: (prev) => ({ page: prev.page }),
 					});
 				}
 
-				const nextArticleId =
-					articlesQuery.data[currentArticleIndex + dir]?.id.toString();
-				if (nextArticleId != null) {
+				const nextRegistrationRequest =
+					registrationRequestsQuery.data[
+						currentRegistrationRequestIndex + dir
+					]?.id.toString();
+				if (nextRegistrationRequest != null) {
 					return navigate({
-						to: "/admin/articles/$articleId",
-						params: { articleId: nextArticleId },
+						to: "/admin/registration-requests/$registrationRequestId",
+						params: { registrationRequestId: nextRegistrationRequest },
 						search: (prev) => ({ page: prev.page }),
 					});
 				}
-			}
-			if (event.key === "c") {
-				return navigate({
-					to: "/admin/articles/new",
-					search: (prev) => ({ page: prev.page }),
-				});
 			}
 		};
 
@@ -134,31 +145,33 @@ function ArticlesComponent() {
 		return () => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [currentArticleIndex, navigate, articlesQuery.data, page]);
+	}, [
+		currentRegistrationRequestIndex,
+		navigate,
+		registrationRequestsQuery.data,
+		page,
+	]);
 
 	return (
 		<div className="flex h-full">
 			<ul className="list-disc min-w-48 h-full flex flex-col">
-				<Link
-					to="/admin/articles/new"
-					className="border-b border-gray-700 h-14 flex items-center justify-center group"
-				>
-					<div className="text-lg group-hover:text-blue-800">New Article</div>
-				</Link>
 				<Suspense fallback={<div>Loading...</div>}>
-					{articlesQuery.data.length === 0 && (
+					{registrationRequestsQuery.data.length === 0 && (
 						<div className="flex flex-grow justify-center">
-							<p className="text-gray-500">No articles</p>
+							<p className="text-gray-500">No registration requests</p>
 						</div>
 					)}
-					{articlesQuery.data.map((article) => {
+					{registrationRequestsQuery.data.map((registrationRequest) => {
 						return (
-							<li key={article.id} className="border-b border-gray-700 flex">
+							<li
+								key={registrationRequest.id}
+								className="border-b border-gray-700 flex"
+							>
 								<Link
 									preload={false}
-									to="/admin/articles/$articleId"
+									to="/admin/registration-requests/$registrationRequestId"
 									params={{
-										articleId: article.id.toString(),
+										registrationRequestId: registrationRequest.id.toString(),
 									}}
 									search={{ page }}
 									className="group block py-1 px-2 w-full border-l-4"
@@ -171,13 +184,9 @@ function ArticlesComponent() {
 								>
 									<div>
 										<p className="text-lg text-blue-800 group-hover:text-blue-600">
-											{article.articleTitle.substring(0, 20)}
-										</p>
-										<p className="text-sm text-gray-500">
-											{article.createdAt.toLocaleDateString()}
-											{article.updatedAt.getTime() !==
-												article.createdAt.getTime() &&
-												` - ${article.updatedAt.toLocaleDateString()}`}
+											{`${registrationRequest.email.substring(0, 16)}${
+												registrationRequest.email.length > 16 ? "..." : ""
+											}`}
 										</p>
 									</div>
 								</Link>
@@ -189,10 +198,10 @@ function ArticlesComponent() {
 				<div className="flex justify-center items-center border-t border-gray-700">
 					<Link
 						disabled={page === 1}
-						to="/admin/articles"
+						to="/admin/registration-requests"
 						search={{ page: page - 1 }}
 						params={{
-							articleId: params?.articleId,
+							registrationRequestId: params?.registrationRequestId,
 						}}
 						className="py-1 text-center flex-grow aria-disabled:cursor-not-allowed aria-disabled:text-gray-500"
 					>
@@ -200,15 +209,19 @@ function ArticlesComponent() {
 					</Link>
 					<div className="w-[1px] bg-gray-700 h-full" />
 					<Link
-						disabled={articlesQuery.data.length % ARTICLE_PAGE_SIZE !== 0}
+						disabled={
+							registrationRequestsQuery.data.length %
+								REGISTRATION_REQUEST_PAGE_SIZE !==
+							0
+						}
 						to={
-							params?.articleId
-								? "/admin/articles/$articleId"
-								: "/admin/articles"
+							params?.registrationRequestId
+								? "/admin/registration-requests/$registrationRequestId"
+								: "/admin/registration-requests"
 						}
 						search={{ page: page + 1 }}
 						params={{
-							articleId: params?.articleId,
+							registrationRequestId: params?.registrationRequestId,
 						}}
 						className="py-1 text-center flex-grow aria-disabled:cursor-not-allowed aria-disabled:text-gray-500"
 					>

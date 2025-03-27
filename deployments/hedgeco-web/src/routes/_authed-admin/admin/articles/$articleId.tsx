@@ -19,7 +19,7 @@ import { adminAuthMiddleware } from "~/utils/middleware";
 
 export const fetchArticleQueryOptions = (articleId: number) => {
 	return queryOptions({
-		queryKey: ["admin-rticle", articleId],
+		queryKey: ["admin-article", articleId],
 		queryFn: () => fetchArticle({ data: articleId }),
 		retry: (failureCount, error) => {
 			if (isNotFound(error)) {

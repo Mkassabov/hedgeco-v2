@@ -26,9 +26,15 @@ import { Route as PublicRegisterNewsMemberImport } from './routes/_public/regist
 import { Route as PublicRegisterInvestorImport } from './routes/_public/register/investor'
 import { Route as PublicRegisterHedgeFundImport } from './routes/_public/register/hedge-fund'
 import { Route as PublicNewsArticleIdImport } from './routes/_public/news/$articleId'
+import { Route as AuthedAdminAdminUsersRouteImport } from './routes/_authed-admin/admin/users/route'
+import { Route as AuthedAdminAdminRegistrationRequestsRouteImport } from './routes/_authed-admin/admin/registration-requests/route'
 import { Route as AuthedAdminAdminArticlesRouteImport } from './routes/_authed-admin/admin/articles/route'
+import { Route as AuthedAdminAdminUsersIndexImport } from './routes/_authed-admin/admin/users/index'
+import { Route as AuthedAdminAdminRegistrationRequestsIndexImport } from './routes/_authed-admin/admin/registration-requests/index'
 import { Route as AuthedAdminAdminArticlesIndexImport } from './routes/_authed-admin/admin/articles/index'
 import { Route as PublicLegalDocLegalDocumentNameImport } from './routes/_public/legal/doc.$legalDocumentName'
+import { Route as AuthedAdminAdminUsersUserIdImport } from './routes/_authed-admin/admin/users/$userId'
+import { Route as AuthedAdminAdminRegistrationRequestsRegistrationRequestIdImport } from './routes/_authed-admin/admin/registration-requests/$registrationRequestId'
 import { Route as AuthedAdminAdminArticlesNewImport } from './routes/_authed-admin/admin/articles/new'
 import { Route as AuthedAdminAdminArticlesArticleIdImport } from './routes/_authed-admin/admin/articles/$articleId'
 
@@ -123,11 +129,41 @@ const PublicNewsArticleIdRoute = PublicNewsArticleIdImport.update({
   getParentRoute: () => PublicNewsRouteRoute,
 } as any)
 
+const AuthedAdminAdminUsersRouteRoute = AuthedAdminAdminUsersRouteImport.update(
+  {
+    id: '/admin/users',
+    path: '/admin/users',
+    getParentRoute: () => AuthedAdminRoute,
+  } as any,
+)
+
+const AuthedAdminAdminRegistrationRequestsRouteRoute =
+  AuthedAdminAdminRegistrationRequestsRouteImport.update({
+    id: '/admin/registration-requests',
+    path: '/admin/registration-requests',
+    getParentRoute: () => AuthedAdminRoute,
+  } as any)
+
 const AuthedAdminAdminArticlesRouteRoute =
   AuthedAdminAdminArticlesRouteImport.update({
     id: '/admin/articles',
     path: '/admin/articles',
     getParentRoute: () => AuthedAdminRoute,
+  } as any)
+
+const AuthedAdminAdminUsersIndexRoute = AuthedAdminAdminUsersIndexImport.update(
+  {
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthedAdminAdminUsersRouteRoute,
+  } as any,
+)
+
+const AuthedAdminAdminRegistrationRequestsIndexRoute =
+  AuthedAdminAdminRegistrationRequestsIndexImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthedAdminAdminRegistrationRequestsRouteRoute,
   } as any)
 
 const AuthedAdminAdminArticlesIndexRoute =
@@ -142,6 +178,20 @@ const PublicLegalDocLegalDocumentNameRoute =
     id: '/legal/doc/$legalDocumentName',
     path: '/legal/doc/$legalDocumentName',
     getParentRoute: () => PublicRoute,
+  } as any)
+
+const AuthedAdminAdminUsersUserIdRoute =
+  AuthedAdminAdminUsersUserIdImport.update({
+    id: '/$userId',
+    path: '/$userId',
+    getParentRoute: () => AuthedAdminAdminUsersRouteRoute,
+  } as any)
+
+const AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute =
+  AuthedAdminAdminRegistrationRequestsRegistrationRequestIdImport.update({
+    id: '/$registrationRequestId',
+    path: '/$registrationRequestId',
+    getParentRoute: () => AuthedAdminAdminRegistrationRequestsRouteRoute,
   } as any)
 
 const AuthedAdminAdminArticlesNewRoute =
@@ -225,6 +275,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminAdminArticlesRouteImport
       parentRoute: typeof AuthedAdminImport
     }
+    '/_authed-admin/admin/registration-requests': {
+      id: '/_authed-admin/admin/registration-requests'
+      path: '/admin/registration-requests'
+      fullPath: '/admin/registration-requests'
+      preLoaderRoute: typeof AuthedAdminAdminRegistrationRequestsRouteImport
+      parentRoute: typeof AuthedAdminImport
+    }
+    '/_authed-admin/admin/users': {
+      id: '/_authed-admin/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthedAdminAdminUsersRouteImport
+      parentRoute: typeof AuthedAdminImport
+    }
     '/_public/news/$articleId': {
       id: '/_public/news/$articleId'
       path: '/$articleId'
@@ -288,6 +352,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAdminAdminArticlesNewImport
       parentRoute: typeof AuthedAdminAdminArticlesRouteImport
     }
+    '/_authed-admin/admin/registration-requests/$registrationRequestId': {
+      id: '/_authed-admin/admin/registration-requests/$registrationRequestId'
+      path: '/$registrationRequestId'
+      fullPath: '/admin/registration-requests/$registrationRequestId'
+      preLoaderRoute: typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdImport
+      parentRoute: typeof AuthedAdminAdminRegistrationRequestsRouteImport
+    }
+    '/_authed-admin/admin/users/$userId': {
+      id: '/_authed-admin/admin/users/$userId'
+      path: '/$userId'
+      fullPath: '/admin/users/$userId'
+      preLoaderRoute: typeof AuthedAdminAdminUsersUserIdImport
+      parentRoute: typeof AuthedAdminAdminUsersRouteImport
+    }
     '/_public/legal/doc/$legalDocumentName': {
       id: '/_public/legal/doc/$legalDocumentName'
       path: '/legal/doc/$legalDocumentName'
@@ -301,6 +379,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/articles/'
       preLoaderRoute: typeof AuthedAdminAdminArticlesIndexImport
       parentRoute: typeof AuthedAdminAdminArticlesRouteImport
+    }
+    '/_authed-admin/admin/registration-requests/': {
+      id: '/_authed-admin/admin/registration-requests/'
+      path: '/'
+      fullPath: '/admin/registration-requests/'
+      preLoaderRoute: typeof AuthedAdminAdminRegistrationRequestsIndexImport
+      parentRoute: typeof AuthedAdminAdminRegistrationRequestsRouteImport
+    }
+    '/_authed-admin/admin/users/': {
+      id: '/_authed-admin/admin/users/'
+      path: '/'
+      fullPath: '/admin/users/'
+      preLoaderRoute: typeof AuthedAdminAdminUsersIndexImport
+      parentRoute: typeof AuthedAdminAdminUsersRouteImport
     }
   }
 }
@@ -326,14 +418,53 @@ const AuthedAdminAdminArticlesRouteRouteWithChildren =
     AuthedAdminAdminArticlesRouteRouteChildren,
   )
 
+interface AuthedAdminAdminRegistrationRequestsRouteRouteChildren {
+  AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute: typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
+  AuthedAdminAdminRegistrationRequestsIndexRoute: typeof AuthedAdminAdminRegistrationRequestsIndexRoute
+}
+
+const AuthedAdminAdminRegistrationRequestsRouteRouteChildren: AuthedAdminAdminRegistrationRequestsRouteRouteChildren =
+  {
+    AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute:
+      AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute,
+    AuthedAdminAdminRegistrationRequestsIndexRoute:
+      AuthedAdminAdminRegistrationRequestsIndexRoute,
+  }
+
+const AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren =
+  AuthedAdminAdminRegistrationRequestsRouteRoute._addFileChildren(
+    AuthedAdminAdminRegistrationRequestsRouteRouteChildren,
+  )
+
+interface AuthedAdminAdminUsersRouteRouteChildren {
+  AuthedAdminAdminUsersUserIdRoute: typeof AuthedAdminAdminUsersUserIdRoute
+  AuthedAdminAdminUsersIndexRoute: typeof AuthedAdminAdminUsersIndexRoute
+}
+
+const AuthedAdminAdminUsersRouteRouteChildren: AuthedAdminAdminUsersRouteRouteChildren =
+  {
+    AuthedAdminAdminUsersUserIdRoute: AuthedAdminAdminUsersUserIdRoute,
+    AuthedAdminAdminUsersIndexRoute: AuthedAdminAdminUsersIndexRoute,
+  }
+
+const AuthedAdminAdminUsersRouteRouteWithChildren =
+  AuthedAdminAdminUsersRouteRoute._addFileChildren(
+    AuthedAdminAdminUsersRouteRouteChildren,
+  )
+
 interface AuthedAdminRouteChildren {
   AuthedAdminAdminArticlesRouteRoute: typeof AuthedAdminAdminArticlesRouteRouteWithChildren
+  AuthedAdminAdminRegistrationRequestsRouteRoute: typeof AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren
+  AuthedAdminAdminUsersRouteRoute: typeof AuthedAdminAdminUsersRouteRouteWithChildren
   AuthedAdminAdminIndexRoute: typeof AuthedAdminAdminIndexRoute
 }
 
 const AuthedAdminRouteChildren: AuthedAdminRouteChildren = {
   AuthedAdminAdminArticlesRouteRoute:
     AuthedAdminAdminArticlesRouteRouteWithChildren,
+  AuthedAdminAdminRegistrationRequestsRouteRoute:
+    AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren,
+  AuthedAdminAdminUsersRouteRoute: AuthedAdminAdminUsersRouteRouteWithChildren,
   AuthedAdminAdminIndexRoute: AuthedAdminAdminIndexRoute,
 }
 
@@ -391,6 +522,8 @@ export interface FileRoutesByFullPath {
   '/contact-us': typeof PublicContactUsRoute
   '/': typeof PublicIndexRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
+  '/admin/registration-requests': typeof AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren
+  '/admin/users': typeof AuthedAdminAdminUsersRouteRouteWithChildren
   '/news/$articleId': typeof PublicNewsArticleIdRoute
   '/register/hedge-fund': typeof PublicRegisterHedgeFundRoute
   '/register/investor': typeof PublicRegisterInvestorRoute
@@ -400,8 +533,12 @@ export interface FileRoutesByFullPath {
   '/news/': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/admin/registration-requests/$registrationRequestId': typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
+  '/admin/users/$userId': typeof AuthedAdminAdminUsersUserIdRoute
   '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
+  '/admin/registration-requests/': typeof AuthedAdminAdminRegistrationRequestsIndexRoute
+  '/admin/users/': typeof AuthedAdminAdminUsersIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -420,8 +557,12 @@ export interface FileRoutesByTo {
   '/news': typeof PublicNewsIndexRoute
   '/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/admin/registration-requests/$registrationRequestId': typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
+  '/admin/users/$userId': typeof AuthedAdminAdminUsersUserIdRoute
   '/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/admin/articles': typeof AuthedAdminAdminArticlesIndexRoute
+  '/admin/registration-requests': typeof AuthedAdminAdminRegistrationRequestsIndexRoute
+  '/admin/users': typeof AuthedAdminAdminUsersIndexRoute
 }
 
 export interface FileRoutesById {
@@ -435,6 +576,8 @@ export interface FileRoutesById {
   '/_public/contact-us': typeof PublicContactUsRoute
   '/_public/': typeof PublicIndexRoute
   '/_authed-admin/admin/articles': typeof AuthedAdminAdminArticlesRouteRouteWithChildren
+  '/_authed-admin/admin/registration-requests': typeof AuthedAdminAdminRegistrationRequestsRouteRouteWithChildren
+  '/_authed-admin/admin/users': typeof AuthedAdminAdminUsersRouteRouteWithChildren
   '/_public/news/$articleId': typeof PublicNewsArticleIdRoute
   '/_public/register/hedge-fund': typeof PublicRegisterHedgeFundRoute
   '/_public/register/investor': typeof PublicRegisterInvestorRoute
@@ -444,8 +587,12 @@ export interface FileRoutesById {
   '/_public/news/': typeof PublicNewsIndexRoute
   '/_authed-admin/admin/articles/$articleId': typeof AuthedAdminAdminArticlesArticleIdRoute
   '/_authed-admin/admin/articles/new': typeof AuthedAdminAdminArticlesNewRoute
+  '/_authed-admin/admin/registration-requests/$registrationRequestId': typeof AuthedAdminAdminRegistrationRequestsRegistrationRequestIdRoute
+  '/_authed-admin/admin/users/$userId': typeof AuthedAdminAdminUsersUserIdRoute
   '/_public/legal/doc/$legalDocumentName': typeof PublicLegalDocLegalDocumentNameRoute
   '/_authed-admin/admin/articles/': typeof AuthedAdminAdminArticlesIndexRoute
+  '/_authed-admin/admin/registration-requests/': typeof AuthedAdminAdminRegistrationRequestsIndexRoute
+  '/_authed-admin/admin/users/': typeof AuthedAdminAdminUsersIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -459,6 +606,8 @@ export interface FileRouteTypes {
     | '/contact-us'
     | '/'
     | '/admin/articles'
+    | '/admin/registration-requests'
+    | '/admin/users'
     | '/news/$articleId'
     | '/register/hedge-fund'
     | '/register/investor'
@@ -468,8 +617,12 @@ export interface FileRouteTypes {
     | '/news/'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/admin/registration-requests/$registrationRequestId'
+    | '/admin/users/$userId'
     | '/legal/doc/$legalDocumentName'
     | '/admin/articles/'
+    | '/admin/registration-requests/'
+    | '/admin/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
@@ -487,8 +640,12 @@ export interface FileRouteTypes {
     | '/news'
     | '/admin/articles/$articleId'
     | '/admin/articles/new'
+    | '/admin/registration-requests/$registrationRequestId'
+    | '/admin/users/$userId'
     | '/legal/doc/$legalDocumentName'
     | '/admin/articles'
+    | '/admin/registration-requests'
+    | '/admin/users'
   id:
     | '__root__'
     | '/_authed-admin'
@@ -500,6 +657,8 @@ export interface FileRouteTypes {
     | '/_public/contact-us'
     | '/_public/'
     | '/_authed-admin/admin/articles'
+    | '/_authed-admin/admin/registration-requests'
+    | '/_authed-admin/admin/users'
     | '/_public/news/$articleId'
     | '/_public/register/hedge-fund'
     | '/_public/register/investor'
@@ -509,8 +668,12 @@ export interface FileRouteTypes {
     | '/_public/news/'
     | '/_authed-admin/admin/articles/$articleId'
     | '/_authed-admin/admin/articles/new'
+    | '/_authed-admin/admin/registration-requests/$registrationRequestId'
+    | '/_authed-admin/admin/users/$userId'
     | '/_public/legal/doc/$legalDocumentName'
     | '/_authed-admin/admin/articles/'
+    | '/_authed-admin/admin/registration-requests/'
+    | '/_authed-admin/admin/users/'
   fileRoutesById: FileRoutesById
 }
 
@@ -548,6 +711,8 @@ export const routeTree = rootRoute
       "filePath": "_authed-admin.tsx",
       "children": [
         "/_authed-admin/admin/articles",
+        "/_authed-admin/admin/registration-requests",
+        "/_authed-admin/admin/users",
         "/_authed-admin/admin/"
       ]
     },
@@ -600,6 +765,22 @@ export const routeTree = rootRoute
         "/_authed-admin/admin/articles/"
       ]
     },
+    "/_authed-admin/admin/registration-requests": {
+      "filePath": "_authed-admin/admin/registration-requests/route.tsx",
+      "parent": "/_authed-admin",
+      "children": [
+        "/_authed-admin/admin/registration-requests/$registrationRequestId",
+        "/_authed-admin/admin/registration-requests/"
+      ]
+    },
+    "/_authed-admin/admin/users": {
+      "filePath": "_authed-admin/admin/users/route.tsx",
+      "parent": "/_authed-admin",
+      "children": [
+        "/_authed-admin/admin/users/$userId",
+        "/_authed-admin/admin/users/"
+      ]
+    },
     "/_public/news/$articleId": {
       "filePath": "_public/news/$articleId.tsx",
       "parent": "/_public/news"
@@ -636,6 +817,14 @@ export const routeTree = rootRoute
       "filePath": "_authed-admin/admin/articles/new.tsx",
       "parent": "/_authed-admin/admin/articles"
     },
+    "/_authed-admin/admin/registration-requests/$registrationRequestId": {
+      "filePath": "_authed-admin/admin/registration-requests/$registrationRequestId.tsx",
+      "parent": "/_authed-admin/admin/registration-requests"
+    },
+    "/_authed-admin/admin/users/$userId": {
+      "filePath": "_authed-admin/admin/users/$userId.tsx",
+      "parent": "/_authed-admin/admin/users"
+    },
     "/_public/legal/doc/$legalDocumentName": {
       "filePath": "_public/legal/doc.$legalDocumentName.tsx",
       "parent": "/_public"
@@ -643,6 +832,14 @@ export const routeTree = rootRoute
     "/_authed-admin/admin/articles/": {
       "filePath": "_authed-admin/admin/articles/index.tsx",
       "parent": "/_authed-admin/admin/articles"
+    },
+    "/_authed-admin/admin/registration-requests/": {
+      "filePath": "_authed-admin/admin/registration-requests/index.tsx",
+      "parent": "/_authed-admin/admin/registration-requests"
+    },
+    "/_authed-admin/admin/users/": {
+      "filePath": "_authed-admin/admin/users/index.tsx",
+      "parent": "/_authed-admin/admin/users"
     }
   }
 }

@@ -71,9 +71,9 @@ export const Route = createFileRoute("/_authed-admin")({
 					<Link
 						to="/admin"
 						activeProps={{
-							className: "underline",
+							className: "border-solid border-b-white",
 						}}
-						className="p-2"
+						className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
 						activeOptions={{ exact: true }}
 					>
 						Home
@@ -81,13 +81,36 @@ export const Route = createFileRoute("/_authed-admin")({
 					<Link
 						to="/admin/articles"
 						activeProps={{
-							className: "underline",
+							className: "border-solid border-b-white",
 						}}
-						className="p-2"
+						className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
 					>
 						Articles
 					</Link>
-					<div className="ml-auto">
+					<div className="m-2 relative group hover:block">
+						<Link
+							to="/admin/users"
+							activeProps={{
+								className: "border-solid border-b-white",
+							}}
+							className="m-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent block"
+						>
+							Users
+						</Link>
+						<div className="absolute left-0 w-48 border border-gray-300 rounded shadow-md hidden group-hover:block bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-200">
+							<Link
+								activeProps={{
+									className: "border-solid border-b-white",
+								}}
+								to="/admin/registration-requests"
+								className="block mx-4 my-2 hover:border-b-white border-b-[1px] hover:border-dotted border-transparent"
+							>
+								Registration Requests
+							</Link>
+							{/* Add more links here if needed */}
+						</div>
+					</div>
+					<div className="ml-auto mr-2">
 						{adminUser ? (
 							<>
 								<span className="mr-2">{adminUser.properties.email}</span>

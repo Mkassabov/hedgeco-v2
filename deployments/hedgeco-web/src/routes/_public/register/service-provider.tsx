@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_public/register/service-provider")({
 	component: RegisterServiceProviderComponent,
 });
 
-const sendContactMessage = createServerFn({ method: "POST" })
+const registerServiceProviderUser = createServerFn({ method: "POST" })
 	.validator((data: { email: string }) => data)
 	.handler(async ({ data }) => {
 		//todo we don't verify the email and we probably should
@@ -18,25 +18,34 @@ const sendContactMessage = createServerFn({ method: "POST" })
 			email: data.email,
 			type: "serviceProvider",
 		});
-		return await sendEmail(
+		await sendEmail(
+			// biome-ignore lint/style/noNonNullAssertion: //todo
 			process.env.CONTACT_EMAIL!,
 			"Service Provider Registration Request",
 			`Email: ${data.email}`,
 		);
+		return {
+			success: true,
+			message: "Registration request sent! An admin will review your request.",
+		};
 	});
 
 function RegisterServiceProviderComponent() {
-	const contactMutation = useMutation({
+	const registrationMutation = useMutation({
 		mutationFn: (data: {
 			email: string;
-		}) => sendContactMessage({ data }),
+		}) => registerServiceProviderUser({ data }),
 	});
-	//todo show feedback the user has been registered
 
 	return (
 		<>
 			<h1 className="text-cyan-900 text-2xl font-bold mt-5">Contact Us</h1>
 			<hr />
+			{registrationMutation.data?.success && (
+				<div className="flex flex-col gap-2 my-2 border-green-400 border-2 rounded-lg p-2 max-w-[40rem] bg-green-900 text-white">
+					<span>{registrationMutation.data.message}</span>
+				</div>
+			)}
 			<form
 				noValidate={false}
 				onSubmit={(e) => {
@@ -45,7 +54,7 @@ function RegisterServiceProviderComponent() {
 
 					const formData = new FormData(form);
 					const email = formData.get("email") as string;
-					contactMutation.mutate({
+					registrationMutation.mutate({
 						email,
 					});
 				}}
@@ -71,10 +80,10 @@ function RegisterServiceProviderComponent() {
 				<button
 					type="submit"
 					className="bg-cyan-900 text-white py-2 px-4 rounded  flex items-center gap-2"
-					disabled={contactMutation.isPending}
+					disabled={registrationMutation.isPending}
 				>
 					Register
-					{contactMutation.isPending && <LoadingSpinner />}
+					{registrationMutation.isPending && <LoadingSpinner />}
 				</button>
 			</form>
 		</>
