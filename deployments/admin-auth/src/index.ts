@@ -19,6 +19,8 @@ const connection = await createConnection({
 	port: Resource.HedgecoDatabase.port,
 	user: Resource.HedgecoDatabase.username,
 	password: Resource.HedgecoDatabase.password,
+	keepAliveInitialDelay: 10000, // 0 by default.
+	enableKeepAlive: true, // false by default.
 });
 
 const db = drizzle(connection, { schema, mode: "default" });
